@@ -1,4 +1,5 @@
 import { work } from "@/lib/data";
+import CaseMedia from "@/components/CaseMedia";
 
 export default function Work() {
   return (
@@ -13,9 +14,7 @@ export default function Work() {
         {work.map((w, i) => (
           <article className="case card reveal" key={i} data-cursor>
             <div className="case-in">
-              <div className="case-media">
-                <img src={w.img} alt={`${w.title} — ${w.kind}`} loading="lazy" />
-              </div>
+              <CaseMedia img={w.img} video={w.video} title={w.title} kind={w.kind} />
               <div className="case-body">
                 <div className="case-head">
                   <div>
