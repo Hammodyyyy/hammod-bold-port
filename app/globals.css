@@ -156,9 +156,12 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .trusted{padding:0 0 var(--sec-pad)}
 .trusted-in{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:34px 0;display:flex;align-items:center;justify-content:center;gap:clamp(24px,6vw,64px);flex-wrap:wrap}
 .trusted .lbl{color:var(--faint)}
-.trusted .names{display:flex;align-items:center;gap:clamp(24px,5vw,52px);flex-wrap:wrap}
-.trusted .name{font-family:var(--font-display);font-weight:600;font-size:clamp(20px,2.4vw,26px);letter-spacing:-.03em;color:var(--muted);transition:color var(--dur-hover)}
-.trusted .name:hover{color:var(--ink)}
+.trusted .names{display:flex;align-items:center;gap:clamp(22px,4.5vw,48px);flex-wrap:wrap}
+.trusted .client{display:inline-flex;align-items:center;gap:12px}
+.trusted .clogo{width:34px;height:34px;border-radius:9px;object-fit:cover;box-shadow:inset 0 0 0 1px var(--line-2);opacity:.92;transition:opacity var(--dur-hover)}
+.trusted .client:hover .clogo{opacity:1}
+.trusted .name{font-family:var(--font-display);font-weight:600;font-size:clamp(19px,2.2vw,24px);letter-spacing:-.03em;color:var(--muted);transition:color var(--dur-hover)}
+.trusted .client:hover .name{color:var(--ink)}
 
 /* case studies */
 .cases{display:flex;flex-direction:column;gap:var(--gap)}
