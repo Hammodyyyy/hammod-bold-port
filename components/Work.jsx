@@ -2,9 +2,12 @@ import { work } from "@/lib/data";
 export default function Work() {
   return (
     <section className="sec wrap" id="work">
-      <div className="chapter"><span className="c">[ 04 / 08 ]</span><span className="t">The Receipts</span></div>
+      <div className="chapter reveal"><span className="c">[ 04 / 08 ]</span><span className="t">The Receipts</span></div>
       <div className="double" style={{ marginBottom: 44 }}>
-        <h2 className="reveal">Don&apos;t take<br /><span className="b">my word.</span></h2>
+        <h2 data-lines>
+          <span className="clip"><span className="ln">Don&apos;t take</span></span>
+          <span className="clip"><span className="ln b">my word.</span></span>
+        </h2>
       </div>
       <div className="work-grid">
         {work.map((w, i) => (

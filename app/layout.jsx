@@ -30,7 +30,12 @@ export const viewport = { themeColor: "#f3eee2", width: "device-width", initialS
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${serif.variable}`}>
-      <body>{children}</body>
+      <body>
+        <noscript>
+          <style>{`.loader{display:none!important}.reveal,.clip .ln{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }

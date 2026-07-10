@@ -2,9 +2,9 @@ import { profile, socials } from "@/lib/data";
 export default function Sign() {
   return (
     <section className="sec wrap" id="sign">
-      <div className="chapter"><span className="c">[ 07 / 08 ]</span><span className="t">Contact</span></div>
+      <div className="chapter reveal"><span className="c">[ 07 / 08 ]</span><span className="t">Contact</span></div>
       <div className="sign">
-        <h2>
+        <h2 data-lines>
           <span className="clip"><span className="ln">Where do</span></span>
           <span className="clip"><span className="ln accent">I sign?</span></span>
         </h2>

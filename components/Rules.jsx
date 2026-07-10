@@ -2,9 +2,12 @@ import { rules } from "@/lib/data";
 export default function Rules() {
   return (
     <section className="sec wrap" id="rules">
-      <div className="chapter"><span className="c">[ 01 / 08 ]</span><span className="t">The House Rules</span></div>
+      <div className="chapter reveal"><span className="c">[ 01 / 08 ]</span><span className="t">The House Rules</span></div>
       <div className="double" style={{ marginBottom: 40 }}>
-        <h2 className="reveal">Rules meet design.<br /><span className="b">Design meets rules.</span></h2>
+        <h2 data-lines>
+          <span className="clip"><span className="ln">Rules meet design.</span></span>
+          <span className="clip"><span className="ln b">Design meets rules.</span></span>
+        </h2>
       </div>
       <div className="rules-list">
         {rules.map((r, i) => (

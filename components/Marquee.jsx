@@ -5,6 +5,10 @@ export default function Marquee() {
     </span>
   );
   return (
-    <div className="marquee" aria-hidden="true"><div className="marquee-track">{row}{row}</div></div>
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee-skew">
+        <div className="marquee-track">{row}{row}</div>
+      </div>
+    </div>
   );
 }

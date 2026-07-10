@@ -1,9 +1,12 @@
 export default function BeforeAfter() {
   return (
     <section className="sec wrap" id="before-after">
-      <div className="chapter"><span className="c">[ 03 / 08 ]</span><span className="t">Before / After</span></div>
+      <div className="chapter reveal"><span className="c">[ 03 / 08 ]</span><span className="t">Before / After</span></div>
       <div className="double" style={{ marginBottom: 40 }}>
-        <h2 className="reveal">Spot the<br /><span className="b">difference.</span></h2>
+        <h2 data-lines>
+          <span className="clip"><span className="ln">Spot the</span></span>
+          <span className="clip"><span className="ln b">difference.</span></span>
+        </h2>
       </div>
       <div className="ba-grid">
         <div className="ba bad reveal">

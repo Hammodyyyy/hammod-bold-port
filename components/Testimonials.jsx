@@ -4,9 +4,12 @@ export default function Testimonials() {
   const rest = testimonials.filter((t) => !t.big);
   return (
     <section className="sec wrap" id="words">
-      <div className="chapter"><span className="c">[ 06 / 08 ]</span><span className="t">Kind Words</span></div>
+      <div className="chapter reveal"><span className="c">[ 06 / 08 ]</span><span className="t">Kind Words</span></div>
       <div className="double" style={{ marginBottom: 44 }}>
-        <h2 className="reveal">They said it.<br /><span className="b">Not me.</span></h2>
+        <h2 data-lines>
+          <span className="clip"><span className="ln">They said it.</span></span>
+          <span className="clip"><span className="ln b">Not me.</span></span>
+        </h2>
       </div>
       <div className="quotes">
         <div className="q big reveal">

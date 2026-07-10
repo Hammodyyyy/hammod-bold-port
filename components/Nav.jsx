@@ -10,6 +10,7 @@ export default function Nav() {
         </div>
         <button className="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
       </div>
+      <div className="nav-prog" aria-hidden="true"><i id="navProg"></i></div>
     </nav>
   );
 }

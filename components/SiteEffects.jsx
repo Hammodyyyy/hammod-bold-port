@@ -5,15 +5,30 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
+// One vocabulary for the whole site: masks snap out fast and settle, everything
+// else shares a single decelerating curve. Consistency is what reads as intentional.
+const EASE_MASK = "expo.out";
+const EASE_REVEAL = "power3.out";
+const HOVER_TARGETS = "a,button,summary,[data-cursor],.rule,.work-card,.proc";
+const MASK_TRAVEL = 115;
+
+// Progress bars scale instead of animating width — a transform composites,
+// a width change relayouts on every frame.
+const scaleXSetter = (el) => (v) => { el.style.transform = `scaleX(${v})`; };
+
 export default function SiteEffects() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fine = window.matchMedia("(any-pointer: fine)").matches;
     gsap.registerPlugin(ScrollTrigger);
 
     let lenis = null;
-    let rafId = 0;
+    let cancelled = false;
     const cleanups = [];
+    const timers = [];
+    cleanups.push(() => { cancelled = true; });
 
+    // ---------- Smooth scroll ----------
     if (!reduce) {
       try {
         lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
@@ -22,111 +37,329 @@ export default function SiteEffects() {
         gsap.ticker.add(tick);
         gsap.ticker.lagSmoothing(0);
         cleanups.push(() => gsap.ticker.remove(tick));
-      } catch (e) { lenis = null; }
+      } catch (e) {
+        lenis = null;
+      }
     }
 
     const nav = document.getElementById("nav");
     const navLinks = document.getElementById("navLinks");
     const burger = document.getElementById("burger");
-    const closeMenu = () => { navLinks && navLinks.classList.remove("open"); burger && burger.classList.remove("open"); if (lenis) lenis.start(); };
+    const closeMenu = () => {
+      navLinks && navLinks.classList.remove("open");
+      burger && burger.classList.remove("open");
+      if (lenis) lenis.start();
+    };
 
+    // ---------- Anchor smooth scroll ----------
     const anchorHandlers = [];
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
       const h = (e) => {
-        const id = a.getAttribute("href"); if (!id || id.length < 2) return;
-        const el = document.querySelector(id); if (!el) return; e.preventDefault();
+        const id = a.getAttribute("href");
+        if (!id || id.length < 2) return;
+        const el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
         closeMenu();
         if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.2 });
         else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
       };
-      a.addEventListener("click", h); anchorHandlers.push([a, h]);
+      a.addEventListener("click", h);
+      anchorHandlers.push([a, h]);
     });
     cleanups.push(() => anchorHandlers.forEach(([a, h]) => a.removeEventListener("click", h)));
 
-    const loader = document.getElementById("loader");
-    const lnum = document.getElementById("lnum");
-    const lbar = document.getElementById("lbar");
-    if (lenis) lenis.stop();
+    // ---------- Scroll-position UI (runs even with reduced motion) ----------
+    const buildScrollUI = () => {
+      const navProg = document.getElementById("navProg");
+      if (navProg) {
+        const setProg = scaleXSetter(navProg);
+        ScrollTrigger.create({ start: 0, end: "max", onUpdate: (self) => setProg(self.progress) });
+      }
 
-    const heroIn = () => {
-      if (reduce) { document.querySelectorAll(".reveal").forEach((r) => { r.style.opacity = 1; r.style.transform = "none"; }); return; }
-      gsap.from(".hero h1 .ln", { yPercent: 112, duration: 1.1, ease: "power4.out", stagger: 0.1 });
-      gsap.from(".hero-eyebrow", { opacity: 0, duration: 0.7, delay: 0.15 });
-      gsap.from(".hero-sub", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 });
-      gsap.from(".hero-row", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.55 });
+      document.querySelectorAll('.nav-links a[href^="#"]:not(.nav-cta)').forEach((link) => {
+        const id = link.getAttribute("href");
+        if (!id || id.length < 2) return;
+        const sec = document.querySelector(id);
+        if (!sec) return;
+        ScrollTrigger.create({
+          trigger: sec,
+          start: "top 45%",
+          end: "bottom 45%",
+          onToggle: (self) => link.classList.toggle("active", self.isActive),
+        });
+      });
     };
 
-    const buildScroll = () => {
-      gsap.utils.toArray(".reveal").forEach((el) => {
-        gsap.to(el, { opacity: 1, y: 0, duration: 1.15, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+    // ---------- Scroll-driven motion ----------
+    const buildMotion = () => {
+      // Headlines rise out of their own mask, line by line.
+      gsap.utils.toArray("[data-lines]").forEach((h) => {
+        const lines = h.querySelectorAll(".ln");
+        if (!lines.length) return;
+        gsap.from(lines, {
+          yPercent: MASK_TRAVEL,
+          duration: 1.1,
+          ease: EASE_MASK,
+          stagger: 0.09,
+          scrollTrigger: { trigger: h, start: "top 90%", once: true },
+        });
       });
-      gsap.utils.toArray(".clip .ln").forEach((el) => {
-        if (el.closest(".hero")) return;
-        gsap.from(el, { yPercent: 112, duration: 1.1, ease: "power4.out", scrollTrigger: { trigger: el, start: "top 92%" } });
+
+      // batch() groups everything crossing the line together, so grid siblings
+      // stagger as a set instead of each firing its own identical tween.
+      ScrollTrigger.batch(".reveal", {
+        start: "top 88%",
+        once: true,
+        onEnter: (batch) =>
+          gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: EASE_REVEAL, stagger: 0.08 }),
       });
-      ScrollTrigger.refresh();
+
+      // Late-loading images change section heights; re-measure when they land.
       const onLoad = () => ScrollTrigger.refresh();
       window.addEventListener("load", onLoad);
       cleanups.push(() => window.removeEventListener("load", onLoad));
     };
 
-    const finish = () => {
-      if (reduce) { if (loader) loader.style.display = "none"; if (lenis) lenis.start(); heroIn(); buildScroll(); return; }
-      gsap.to(loader, { yPercent: -100, duration: 0.9, ease: "power4.inOut", delay: 0.2, onComplete: () => {
-        if (loader) loader.style.display = "none"; if (lenis) lenis.start(); heroIn(); buildScroll();
-      }});
+    // ---------- Marquee reacts to scroll velocity ----------
+    const buildMarquee = () => {
+      const skew = document.querySelector(".marquee-skew");
+      if (!skew) return;
+      const clamp = gsap.utils.clamp(-6, 6);
+      let target = 0;
+      let current = 0;
+
+      ScrollTrigger.create({
+        start: 0,
+        end: "max",
+        onUpdate: (self) => { target = clamp(self.getVelocity() / -420); },
+      });
+
+      const tick = () => {
+        target *= 0.92;                       // decays to rest once scrolling stops
+        current += (target - current) * 0.15;
+        if (Math.abs(current) < 0.005 && Math.abs(target) < 0.005) return;
+        skew.style.transform = `skewX(${current.toFixed(3)}deg)`;
+      };
+      gsap.ticker.add(tick);
+      cleanups.push(() => {
+        gsap.ticker.remove(tick);
+        skew.style.transform = "";
+      });
     };
 
-    if (reduce) { if (lnum) lnum.textContent = "[ 100 ]"; if (lbar) lbar.style.width = "100%"; finish(); }
-    else {
-      const p = { v: 0 };
-      gsap.to(p, { v: 100, duration: 1.6, ease: "power2.inOut",
-        onUpdate: () => { const n = Math.round(p.v); if (lnum) lnum.textContent = `[ ${String(n).padStart(3, "0")} ]`; if (lbar) lbar.style.width = n + "%"; },
-        onComplete: finish });
-    }
+    // ---------- FAQ accordion ----------
+    // <details> snaps open natively. Intercept and animate the panel height,
+    // keeping the open attribute set until a close finishes so content stays laid out.
+    const buildFAQ = () => {
+      const handlers = [];
+      document.querySelectorAll(".faq details").forEach((d) => {
+        const summary = d.querySelector("summary");
+        const panel = d.querySelector(".fa");
+        const plus = d.querySelector(".plus");
+        if (!summary || !panel) return;
 
-    const onScroll = () => { if (!nav) return; if (window.scrollY > 40) nav.classList.add("small"); else nav.classList.remove("small"); };
-    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+        const onClick = (e) => {
+          e.preventDefault();
+          const isOpen = d.hasAttribute("open");
+          gsap.killTweensOf(panel);
+          if (plus) gsap.to(plus, { rotate: isOpen ? 0 : 45, duration: 0.35, ease: "power2.out" });
+
+          if (isOpen) {
+            gsap.to(panel, {
+              height: 0, opacity: 0, duration: 0.42, ease: "power2.inOut",
+              onComplete: () => {
+                d.removeAttribute("open");
+                gsap.set(panel, { clearProps: "height,opacity" });
+              },
+            });
+          } else {
+            d.setAttribute("open", "");
+            gsap.fromTo(panel,
+              { height: 0, opacity: 0 },
+              {
+                height: "auto", opacity: 1, duration: 0.5, ease: EASE_REVEAL,
+                onComplete: () => gsap.set(panel, { clearProps: "height" }),
+              }
+            );
+          }
+        };
+        summary.addEventListener("click", onClick);
+        handlers.push([summary, onClick]);
+      });
+      cleanups.push(() => handlers.forEach(([s, h]) => s.removeEventListener("click", h)));
+    };
+
+    // ---------- Hero entrance ----------
+    // Built paused so from() stages the start state behind the loader.
+    const buildHeroTl = () => {
+      const tl = gsap.timeline({ paused: true, defaults: { ease: EASE_REVEAL } });
+      tl.from(".hero-eyebrow", { opacity: 0, y: 14, duration: 0.7 }, 0)
+        .from(".hero h1 .ln", { yPercent: MASK_TRAVEL, duration: 1.15, ease: EASE_MASK, stagger: 0.1 }, 0.06)
+        .from(".hero-sub", { y: 22, opacity: 0, duration: 0.8 }, 0.55)
+        // Direct children only: `.hero-stats div` would also match .v and .l,
+        // double-applying the fade and stretching the stagger across 9 nodes.
+        .from(".hero-stats > div", { y: 20, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.68)
+        .from(".hero-cta", { y: 20, opacity: 0, duration: 0.7 }, 0.8);
+      return tl;
+    };
+
+    // ---------- Loader ----------
+    const loader = document.getElementById("loader");
+    const lnum = document.getElementById("lnum");
+    const lbar = document.getElementById("lbar");
+    const setLoaderBar = lbar ? scaleXSetter(lbar) : null;
+    if (lenis) lenis.stop();
+
+    const p = { v: 0 };
+    const render = () => {
+      const n = Math.round(p.v);
+      if (lnum) lnum.textContent = `[ ${String(n).padStart(3, "0")} ]`;
+      if (setLoaderBar) setLoaderBar(p.v / 100);
+    };
+
+    const finish = () => {
+      if (cancelled) return;
+
+      if (reduce) {
+        // Reduced motion is handled entirely in CSS; nothing is staged here, so
+        // there is nothing to animate back in. <details> keeps native behaviour.
+        buildScrollUI();
+        ScrollTrigger.refresh();
+        if (loader) loader.style.display = "none";
+        if (lenis) lenis.start();
+        return;
+      }
+
+      buildMotion();
+      buildMarquee();
+      buildFAQ();
+      buildScrollUI();
+      ScrollTrigger.refresh();
+
+      const hero = buildHeroTl();
+
+      const out = gsap.timeline({
+        onComplete: () => { if (loader) loader.style.display = "none"; },
+      });
+      out.to(".loader .lname, .loader .lnum", {
+          y: -30, opacity: 0, duration: 0.5, ease: "power2.in", stagger: 0.06,
+        })
+        .to(loader, { yPercent: -100, duration: 1, ease: "power4.inOut" }, "-=0.2")
+        .add(() => { if (lenis) lenis.start(); }, "<")
+        // Hero begins while the loader is still clearing — the overlap is what
+        // makes the handoff feel like one movement instead of two.
+        .add(() => hero.play(), "<+=0.26");
+    };
+
+    if (reduce) {
+      p.v = 100;
+      render();
+      finish();
+    } else {
+      // Climb to 90 on a curve, then let real readiness close the last 10 —
+      // never stalls, never lies about being done.
+      const climb = gsap.to(p, { v: 90, duration: 1.05, ease: "power2.out", onUpdate: render });
+
+      const ready = new Promise((res) => {
+        if (document.readyState === "complete") res();
+        else window.addEventListener("load", res, { once: true });
+      });
+      const cap = new Promise((res) => timers.push(setTimeout(res, 2000)));
+      const floor = new Promise((res) => timers.push(setTimeout(res, 900)));
+
+      Promise.all([Promise.race([ready, cap]), floor]).then(() => {
+        if (cancelled) return;
+        climb.kill();
+        gsap.to(p, { v: 100, duration: 0.45, ease: "power2.inOut", onUpdate: render, onComplete: finish });
+      });
+    }
+    cleanups.push(() => timers.forEach(clearTimeout));
+
+    // ---------- Nav scroll state ----------
+    const onScroll = () => {
+      if (!nav) return;
+      nav.classList.toggle("small", window.scrollY > 40);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     cleanups.push(() => window.removeEventListener("scroll", onScroll));
 
-    const onBurger = () => {
-      if (navLinks.classList.contains("open")) closeMenu();
-      else { navLinks.classList.add("open"); burger.classList.add("open"); if (lenis) lenis.stop(); }
-    };
-    if (burger) { burger.addEventListener("click", onBurger); cleanups.push(() => burger.removeEventListener("click", onBurger)); }
-
-    const dot = document.getElementById("dot");
-    const ring = document.getElementById("ring");
-    const fine = window.matchMedia("(any-pointer: fine)").matches;
-    if (fine && !reduce && dot && ring) {
-      document.body.classList.add("cursor-on");
-      let mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my;
-      dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-      const onMove = (e) => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`; };
-      window.addEventListener("mousemove", onMove);
-      const loop = () => { rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18; ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`; rafId = requestAnimationFrame(loop); };
-      loop();
-      const hoverEls = document.querySelectorAll("[data-cursor],a,button,summary");
-      const enter = () => ring.classList.add("hover");
-      const leave = () => ring.classList.remove("hover");
-      hoverEls.forEach((el) => { el.addEventListener("mouseenter", enter); el.addEventListener("mouseleave", leave); });
-      const magnets = document.querySelectorAll(".magnetic");
-      const magHandlers = [];
-      magnets.forEach((b) => {
-        const move = (e) => { const r = b.getBoundingClientRect(); const x = e.clientX - (r.left + r.width / 2); const y = e.clientY - (r.top + r.height / 2); gsap.to(b, { x: x * 0.3, y: y * 0.4, duration: 0.5, ease: "power3.out" }); };
-        const out = () => gsap.to(b, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1,.4)" });
-        b.addEventListener("mousemove", move); b.addEventListener("mouseleave", out);
-        magHandlers.push([b, move, out]);
-      });
-      cleanups.push(() => {
-        window.removeEventListener("mousemove", onMove);
-        cancelAnimationFrame(rafId);
-        hoverEls.forEach((el) => { el.removeEventListener("mouseenter", enter); el.removeEventListener("mouseleave", leave); });
-        magHandlers.forEach(([b, mv, ml]) => { b.removeEventListener("mousemove", mv); b.removeEventListener("mouseleave", ml); });
-        document.body.classList.remove("cursor-on");
-      });
+    // ---------- Mobile menu ----------
+    if (burger && navLinks) {
+      const onBurger = () => {
+        if (navLinks.classList.contains("open")) {
+          closeMenu();
+        } else {
+          navLinks.classList.add("open");
+          burger.classList.add("open");
+          if (lenis) lenis.stop();
+        }
+      };
+      burger.addEventListener("click", onBurger);
+      cleanups.push(() => burger.removeEventListener("click", onBurger));
     }
 
+    // ---------- Custom cursor ----------
+    const dot = document.getElementById("dot");
+    const ring = document.getElementById("ring");
+    if (fine && !reduce && dot && ring) {
+      document.body.classList.add("cursor-on");
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      gsap.set([dot, ring], { xPercent: -50, yPercent: -50, x: cx, y: cy });
+
+      const dx = gsap.quickTo(dot, "x", { duration: 0.12, ease: "power3" });
+      const dy = gsap.quickTo(dot, "y", { duration: 0.12, ease: "power3" });
+      const rx = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3" });
+      const ry = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3" });
+
+      // One delegated listener replaces two per interactive element, and it keeps
+      // working for anything added to the DOM later.
+      let hovered = null;
+      const onMove = (e) => {
+        dx(e.clientX); dy(e.clientY);
+        rx(e.clientX); ry(e.clientY);
+        const el = e.target instanceof Element ? e.target.closest(HOVER_TARGETS) : null;
+        if (el !== hovered) {
+          hovered = el;
+          ring.classList.toggle("hover", !!el);
+          // Scale rather than width/height: keeps the ring centred under the
+          // pointer instead of drifting as the box grows.
+          gsap.to(ring, { scale: el ? 1.75 : 1, duration: 0.4, ease: "power3.out" });
+        }
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+      cleanups.push(() => {
+        window.removeEventListener("pointermove", onMove);
+        document.body.classList.remove("cursor-on");
+      });
+
+      // ---------- Magnetic buttons ----------
+      const magHandlers = [];
+      document.querySelectorAll(".magnetic").forEach((b) => {
+        const move = (e) => {
+          const r = b.getBoundingClientRect();
+          gsap.to(b, {
+            x: (e.clientX - (r.left + r.width / 2)) * 0.3,
+            y: (e.clientY - (r.top + r.height / 2)) * 0.4,
+            duration: 0.55, ease: "power3.out",
+          });
+        };
+        const out = () => gsap.to(b, { x: 0, y: 0, duration: 0.9, ease: "elastic.out(1,.45)" });
+        b.addEventListener("pointermove", move);
+        b.addEventListener("pointerleave", out);
+        magHandlers.push([b, move, out]);
+      });
+      cleanups.push(() =>
+        magHandlers.forEach(([b, mv, ml]) => {
+          b.removeEventListener("pointermove", mv);
+          b.removeEventListener("pointerleave", ml);
+        })
+      );
+    }
+
+    // ---------- Cleanup ----------
     return () => {
       cleanups.forEach((fn) => { try { fn(); } catch (e) {} });
       ScrollTrigger.getAll().forEach((t) => t.kill());
