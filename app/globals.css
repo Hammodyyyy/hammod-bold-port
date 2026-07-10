@@ -74,8 +74,12 @@ img{max-width:100%;display:block}
 section{position:relative}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px;position:relative}
-@media (max-width:640px){ .wrap{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(22px,env(safe-area-inset-right))} }
+/* mobile-first gutter ramp: 24px phones -> 32px small tablets -> 40px desktop */
+.wrap{max-width:var(--maxw);margin:0 auto;position:relative;
+  padding-left:max(24px,env(safe-area-inset-left));
+  padding-right:max(24px,env(safe-area-inset-right))}
+@media (min-width:600px){ .wrap{padding-left:32px;padding-right:32px} }
+@media (min-width:960px){ .wrap{padding-left:40px;padding-right:40px} }
 .mono{font-family:var(--font-mono),monospace;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:400}
 .accent{color:var(--accent-2)}
 .measure{max-width:var(--measure)}
