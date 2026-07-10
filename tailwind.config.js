@@ -3,8 +3,8 @@ module.exports = {
   content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   corePlugins: { preflight: false },
   theme: { extend: {
-    colors: { bg: "#f3eee2", ink: "#1a1712", accent: "#ff4a1c", muted: "#6b6558" },
-    fontFamily: { display: ["var(--font-display)"], body: ["var(--font-body)"], mono: ["var(--font-mono)"], serif: ["var(--font-serif)"] },
+    colors: { bg: "#08080a", ink: "#f6f6f7", accent: "#8f83ff", muted: "#a2a2ad" },
+    fontFamily: { display: ["var(--font-display)"], body: ["var(--font-body)"], mono: ["var(--font-mono)"] },
   } },
   plugins: [],
 };

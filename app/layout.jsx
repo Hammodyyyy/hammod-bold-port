@@ -1,10 +1,9 @@
 import "./globals.css";
-import { Space_Grotesk, Inter, Space_Mono, Instrument_Serif } from "next/font/google";
+import { Space_Grotesk, Inter, Space_Mono } from "next/font/google";
 
 const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
 const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
 const TITLE = "Hammody — Roblox UI Design & Studio Implementation";
 const DESC = "Premium UI systems for Roblox games. I design and build production-ready interfaces — shops, HUDs, menus, and systems — implemented directly in Roblox Studio. Trusted by creators including DoBig and Novaly.";
@@ -30,7 +29,7 @@ export const viewport = { themeColor: "#080809", width: "device-width", initialS
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );
