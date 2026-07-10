@@ -19,7 +19,7 @@ export default function Work() {
                 <div className="case-head">
                   <div>
                     <h3 className="ct">{w.title}</h3>
-                    <div className="cclient">{w.kind} · {w.client}</div>
+                    <div className="cclient">{w.kind}</div>
                   </div>
                   <div className="scope" aria-label="Scope of work">
                     {w.scope.map((s, j) => (<span className="badge" key={j}>{s}</span>))}
