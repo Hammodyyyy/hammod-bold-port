@@ -12,7 +12,7 @@ export default function Services() {
   return (
     <section className="sec wrap" id="services">
       <div className="sec-head">
-        <span className="eyebrow mono"><span className="dot"></span>Pricing</span>
+        <span className="eyebrow mono reveal"><span className="dot"></span>Pricing</span>
         <h2 className="reveal">Priced by scope, not by the frame.</h2>
         <p className="reveal">Pick the level your game needs. Each package is a starting point — you get a fixed quote up front, with no hourly guessing or surprise add-ons.</p>
       </div>

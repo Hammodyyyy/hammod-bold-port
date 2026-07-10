@@ -4,7 +4,7 @@ export default function WhyMe() {
   return (
     <section className="sec wrap" id="why">
       <div className="sec-head">
-        <span className="eyebrow mono"><span className="dot"></span>Why Work With Me</span>
+        <span className="eyebrow mono reveal"><span className="dot"></span>Why Work With Me</span>
         <h2 className="reveal">Most designers hand you a file. I hand you a result.</h2>
         <p className="reveal">The gap between a mockup and shipped UI is everything that happens after the Figma file — and that&apos;s the part I own.</p>
       </div>

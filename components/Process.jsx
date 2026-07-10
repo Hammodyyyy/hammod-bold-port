@@ -23,7 +23,7 @@ export default function Process() {
   return (
     <section className="sec wrap" id="process">
       <div className="sec-head">
-        <span className="eyebrow mono"><span className="dot"></span>How I Work</span>
+        <span className="eyebrow mono reveal"><span className="dot"></span>How I Work</span>
         <h2 className="reveal">A process that stays out of your way.</h2>
         <p className="reveal">Six steps from your brief to UI running in your live game — with updates at every stage, never silence.</p>
       </div>

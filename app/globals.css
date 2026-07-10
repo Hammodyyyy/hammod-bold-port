@@ -138,7 +138,7 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .sec-head .eyebrow{margin-bottom:22px}
 .sec-head h2{font-size:clamp(30px,4.4vw,52px)}
 .sec-head p{color:var(--muted);font-size:19px;margin-top:18px;max-width:var(--measure)}
-.reveal{opacity:0;transform:translateY(22px)}
+.reveal{opacity:0;transform:translateY(30px)}
 .clip{overflow:hidden;display:block}
 .clip>*{display:block}
 .card{position:relative;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);transition:border-color var(--dur-card) var(--ease),background var(--dur-card) var(--ease),transform var(--dur-card) var(--ease)}

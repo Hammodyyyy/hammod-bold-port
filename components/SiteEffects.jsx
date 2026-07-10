@@ -58,12 +58,27 @@ export default function SiteEffects() {
     };
 
     const buildScroll = () => {
-      gsap.utils.toArray(".reveal").forEach((el) => {
-        gsap.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+      if (reduce) {
+        gsap.utils.toArray(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
+        return;
+      }
+      // gentle fade + rise, staggered as each cluster of elements scrolls in
+      gsap.set(".reveal", { opacity: 0, y: 30 });
+      ScrollTrigger.batch(".reveal", {
+        start: "top 90%",
+        onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", stagger: 0.1, overwrite: true }),
       });
       gsap.utils.toArray(".clip .ln").forEach((el) => {
         if (el.closest(".hero")) return;
-        gsap.from(el, { yPercent: 112, duration: 0.6, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 92%" } });
+        gsap.from(el, { yPercent: 112, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+      });
+      // safety net: reveal anything already at/above the fold (e.g. reload mid-page)
+      requestAnimationFrame(() => {
+        gsap.utils.toArray(".reveal").forEach((el) => {
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.9 && gsap.getProperty(el, "opacity") === 0) {
+            gsap.to(el, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" });
+          }
+        });
       });
       ScrollTrigger.refresh();
       const onLoad = () => ScrollTrigger.refresh();

@@ -4,7 +4,7 @@ export default function Testimonials() {
   return (
     <section className="sec wrap" id="words">
       <div className="sec-head">
-        <span className="eyebrow mono"><span className="dot"></span>Client Words</span>
+        <span className="eyebrow mono reveal"><span className="dot"></span>Client Words</span>
         <h2 className="reveal">What it&apos;s like to work with me.</h2>
       </div>
       <div className="quotes">

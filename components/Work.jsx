@@ -4,7 +4,7 @@ export default function Work() {
   return (
     <section className="sec wrap" id="work">
       <div className="sec-head">
-        <span className="eyebrow mono"><span className="dot"></span>Selected Work</span>
+        <span className="eyebrow mono reveal"><span className="dot"></span>Selected Work</span>
         <h2 className="reveal">Case studies, not screenshots.</h2>
         <p className="reveal">Each project started as a real problem — a system players couldn&apos;t read, a flow they got lost in. Here&apos;s what I changed, and why it worked.</p>
       </div>
