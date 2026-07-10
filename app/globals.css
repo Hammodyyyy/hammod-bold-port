@@ -182,6 +182,12 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .case{overflow:hidden}
 .case-in{display:grid;grid-template-columns:1.05fr .95fr}
 @media (max-width:900px){ .case-in{grid-template-columns:1fr} }
+/* alternate the media side on desktop: 1st left, 2nd right, 3rd left, 4th right */
+@media (min-width:901px){
+  .case:nth-child(even) .case-in{grid-template-columns:.95fr 1.05fr}
+  .case:nth-child(even) .case-media{order:2}
+  .case:nth-child(even) .case-body{order:1}
+}
 .case-media{position:relative;overflow:hidden;background:var(--elev);min-height:340px}
 @media (max-width:900px){ .case-media{min-height:230px} }
 .case-media img{width:100%;height:100%;object-fit:cover;transition:transform 600ms var(--ease)}
