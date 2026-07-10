@@ -265,9 +265,17 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .contact h2 .l2{color:var(--accent-2)}
 .contact .sub{color:var(--muted);font-size:18px;max-width:560px;margin:24px auto 34px;line-height:1.6}
 .contact .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.contact .socials{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:44px;padding-top:28px;border-top:1px solid var(--line)}
-.contact .socials a{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);transition:color var(--dur-hover)}
-.contact .socials a:hover{color:var(--accent-2)}
+.contact .socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:44px;padding-top:32px;border-top:1px solid var(--line)}
+.contact .socials a{display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);
+  border:1px solid var(--line-2);border-radius:100px;padding:10px 16px;background:var(--panel);
+  transition:color var(--dur-btn) var(--ease),background var(--dur-btn) var(--ease),border-color var(--dur-btn) var(--ease),transform var(--dur-hover) var(--ease)}
+.contact .socials a:hover{color:var(--ink);background:var(--panel-2);border-color:var(--ink);transform:translateY(-2px)}
+.contact .socials .s-ico{width:15px;height:15px;flex-shrink:0;color:var(--accent-2)}
+.contact .socials a:hover .s-ico{color:var(--ink)}
+.contact .socials .s-name{text-transform:uppercase;letter-spacing:.08em}
+.contact .socials .s-handle{color:var(--faint)}
+.contact .socials a:hover .s-handle{color:var(--muted)}
 
 footer{padding:38px 0;border-top:1px solid var(--line)}
 .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
