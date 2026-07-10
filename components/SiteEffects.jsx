@@ -53,7 +53,7 @@ export default function SiteEffects() {
       gsap.from(".hero h1 .ln", { yPercent: 112, duration: 1.1, ease: "power4.out", stagger: 0.1 });
       gsap.from(".hero-eyebrow", { opacity: 0, duration: 0.7, delay: 0.15 });
       gsap.from(".hero-sub", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.4 });
-      gsap.from(".hero-row", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.55 });
+      gsap.from(".hero-cta", { y: 20, opacity: 0, duration: 0.8, ease: "power3.out", delay: 0.55 });
     };
 
     const buildScroll = () => {

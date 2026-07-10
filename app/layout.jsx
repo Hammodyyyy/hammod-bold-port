@@ -1,31 +1,32 @@
 import "./globals.css";
-import { Anton, Inter, Space_Mono, Instrument_Serif } from "next/font/google";
+import { Space_Grotesk, Inter, Space_Mono, Instrument_Serif } from "next/font/google";
 
-const display = Anton({ subsets: ["latin"], weight: "400", variable: "--font-display", display: "swap" });
+const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
 const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
 const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
+const TITLE = "Hammody — Roblox UI/UX & Studio Implementation";
+const DESC = "Interface design for Roblox games that convert. I design and build the shops, HUDs, and systems players understand and spend in — shipped straight into Studio. Trusted by studios like Dobig and Novaly.";
+
 export const metadata = {
   metadataBase: new URL("https://hammody.pages.dev"),
-  title: "Hammody — Roblox UI/UX & Motion Designer",
-  description: "Most Roblox UI is forgettable. Mine isn't. UI/UX & motion design for Roblox games — shops, quests, crafting, stores.",
+  title: TITLE,
+  description: DESC,
   icons: { icon: "/favicon.png", apple: "/favicon.png" },
   openGraph: {
     type: "website", url: "https://hammody.pages.dev/",
-    title: "Hammody — Roblox UI/UX & Motion Designer",
-    description: "Most Roblox UI is forgettable. Mine isn't.",
+    title: TITLE, description: DESC,
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hammody — Roblox UI/UX & Motion Designer",
-    description: "Most Roblox UI is forgettable. Mine isn't.",
+    title: TITLE, description: DESC,
     images: ["/og.png"],
   },
 };
 
-export const viewport = { themeColor: "#f3eee2", width: "device-width", initialScale: 1 };
+export const viewport = { themeColor: "#080809", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }) {
   return (

@@ -1,21 +1,27 @@
-import { stats } from "@/lib/data";
+import { hero, clients } from "@/lib/data";
+
 export default function Hero() {
   return (
     <header className="hero wrap" id="top">
-      <div className="hero-eyebrow mono"><span className="dot"></span>[ 00 / 08 ] — Roblox UI/UX &amp; Motion Designer</div>
+      <div className="hero-eyebrow">
+        <span className="eyebrow mono"><span className="dot"></span>{hero.eyebrow}</span>
+      </div>
       <h1>
-        <span className="clip"><span className="ln">Most Roblox UI</span></span>
-        <span className="clip"><span className="ln">is forgettable.</span></span>
-        <span className="clip"><span className="ln l2">Mine isn&apos;t.</span></span>
+        {hero.headline.map((line, i) => (
+          <span className="clip" key={i}>
+            <span className={`ln${i === hero.headline.length - 1 ? " l2" : ""}`}>{line}</span>
+          </span>
+        ))}
       </h1>
-      <p className="hero-sub">I design and animate the interfaces that make players <b>stay, spend, and come back</b>. Six years, 600M+ visits, and a client list that keeps saying the same thing: you can&apos;t get better than this.</p>
-      <div className="hero-row">
-        <div className="hero-stats">
-          {stats.map((s, i) => (<div key={i}><div className="v">{s.v}</div><div className="l">{s.l}</div></div>))}
-        </div>
-        <div className="hero-cta">
-          <a href="#sign" className="btn btn-fill magnetic" data-cursor>Where do I sign →</a>
-          <a href="#work" className="btn btn-line magnetic" data-cursor>See the receipts</a>
+      <p className="hero-sub">{hero.sub}</p>
+      <div className="hero-cta">
+        <a href={hero.ctaPrimary.href} className="btn btn-fill magnetic" data-cursor>{hero.ctaPrimary.label} →</a>
+        <a href={hero.ctaSecondary.href} className="btn btn-line magnetic" data-cursor>{hero.ctaSecondary.label}</a>
+      </div>
+      <div className="hero-trust reveal">
+        <div className="lbl mono">Trusted by studios &amp; creators</div>
+        <div className="hero-logos">
+          {clients.map((c, i) => (<span className="logo" key={i}>{c.name}</span>))}
         </div>
       </div>
     </header>

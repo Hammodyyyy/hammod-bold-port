@@ -1,17 +1,20 @@
-import { profile, socials } from "@/lib/data";
-export default function Sign() {
+import { contact, socials } from "@/lib/data";
+
+export default function Contact() {
   return (
-    <section className="sec wrap" id="sign">
-      <div className="chapter"><span className="c">[ 07 / 08 ]</span><span className="t">Contact</span></div>
-      <div className="sign">
+    <section className="sec wrap" id="contact">
+      <div className="contact reveal">
         <h2>
-          <span className="clip"><span className="ln">Where do</span></span>
-          <span className="clip"><span className="ln accent">I sign?</span></span>
+          {contact.headline.map((line, i) => (
+            <span className="clip" key={i}>
+              <span className={`ln${i === contact.headline.length - 1 ? " l2" : ""}`}>{line}</span>
+            </span>
+          ))}
         </h2>
-        <p className="sub">Your game deserves UI that pulls its weight. Discord&apos;s the fastest way to reach me — send the game and what you need.</p>
+        <p className="sub">{contact.sub}</p>
         <div className="cta">
-          <a href={profile.discordUrl} target="_blank" rel="noopener" className="btn btn-fill magnetic" data-cursor>Message on Discord →</a>
-          <a href="#work" className="btn btn-line magnetic" data-cursor>See the work</a>
+          <a href={contact.ctaPrimary.href} target="_blank" rel="noopener" className="btn btn-fill magnetic" data-cursor>{contact.ctaPrimary.label} →</a>
+          <a href={contact.ctaSecondary.href} className="btn btn-line magnetic" data-cursor>{contact.ctaSecondary.label}</a>
         </div>
         <div className="socials">
           {socials.map((s) => (<a key={s.href} href={s.href} target="_blank" rel="noopener" data-cursor>{s.label}</a>))}

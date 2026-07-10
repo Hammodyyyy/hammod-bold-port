@@ -1,15 +1,26 @@
-import { testimonials } from "@/lib/data";
+import { testimonials, metrics } from "@/lib/data";
+
 export default function Testimonials() {
   const big = testimonials.find((t) => t.big);
   const rest = testimonials.filter((t) => !t.big);
   return (
-    <section className="sec wrap" id="words">
-      <div className="chapter"><span className="c">[ 06 / 08 ]</span><span className="t">Kind Words</span></div>
-      <div className="double" style={{ marginBottom: 44 }}>
-        <h2 className="reveal">They said it.<br /><span className="b">Not me.</span></h2>
+    <section className="sec wrap" id="results">
+      <div className="sec-head">
+        <span className="eyebrow mono"><span className="dot"></span>Results &amp; Words</span>
+        <h2 className="reveal">The proof, in their words.</h2>
       </div>
+
+      <div className="metrics reveal">
+        {metrics.map((m, i) => (
+          <div className="metric" key={i}>
+            <div className="mv">{m.v}</div>
+            <div className="ml">{m.l}</div>
+          </div>
+        ))}
+      </div>
+
       <div className="quotes">
-        <div className="q big reveal">
+        <div className="q big card reveal">
           <div className="stars">★★★★★</div>
           <div className="qt">{big.quote}</div>
           <div className="who">
@@ -18,7 +29,7 @@ export default function Testimonials() {
           </div>
         </div>
         {rest.map((t, i) => (
-          <div className="q reveal" key={i}>
+          <div className="q card reveal" key={i}>
             <div className="stars">★★★★★</div>
             <div className="qt">{t.quote}</div>
             <div className="who">
