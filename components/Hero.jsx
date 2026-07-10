@@ -1,4 +1,4 @@
-import { hero, clients } from "@/lib/data";
+import { hero } from "@/lib/data";
 
 export default function Hero() {
   return (
@@ -17,12 +17,6 @@ export default function Hero() {
       <div className="hero-cta">
         <a href={hero.ctaPrimary.href} className="btn btn-fill magnetic" data-cursor>{hero.ctaPrimary.label} →</a>
         <a href={hero.ctaSecondary.href} className="btn btn-line magnetic" data-cursor>{hero.ctaSecondary.label}</a>
-      </div>
-      <div className="hero-trust reveal">
-        <div className="lbl mono">Trusted by studios &amp; creators</div>
-        <div className="hero-logos">
-          {clients.map((c, i) => (<span className="logo" key={i}>{c.name}</span>))}
-        </div>
       </div>
     </header>
   );

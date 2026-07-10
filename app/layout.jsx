@@ -6,8 +6,8 @@ const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
 const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
-const TITLE = "Hammody — Roblox UI/UX & Studio Implementation";
-const DESC = "Interface design for Roblox games that convert. I design and build the shops, HUDs, and systems players understand and spend in — shipped straight into Studio. Trusted by studios like Dobig and Novaly.";
+const TITLE = "Hammody — Roblox UI Design & Studio Implementation";
+const DESC = "Premium UI systems for Roblox games. I design and build production-ready interfaces — shops, HUDs, menus, and systems — implemented directly in Roblox Studio. Trusted by creators including DoBig and Novaly.";
 
 export const metadata = {
   metadataBase: new URL("https://hammody.pages.dev"),

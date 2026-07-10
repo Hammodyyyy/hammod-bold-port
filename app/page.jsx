@@ -1,6 +1,5 @@
 import Loader from "@/components/Loader";
 import Cursor from "@/components/Cursor";
-import Grain from "@/components/Grain";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import TrustedBy from "@/components/TrustedBy";
@@ -19,7 +18,6 @@ export default function Page() {
     <>
       <Loader />
       <Cursor />
-      <Grain />
       <div className="content">
         <Nav />
         <Hero />
