@@ -11,7 +11,7 @@ export default function Rules() {
       </div>
       <div className="rules-list">
         {rules.map((r, i) => (
-          <div className="rule" key={i} data-cursor>
+          <div className="rule reveal" key={i} data-cursor>
             <span className="rn">{String(i + 1).padStart(3, "0")}</span>
             <span className="rt">{r}</span>
           </div>

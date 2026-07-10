@@ -47,6 +47,42 @@ section{position:relative}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .content{position:relative;z-index:3}
 
+/* animated backdrop
+   Layering: grid + shapes paint over the cream body, content sits above at z:3,
+   grain over everything at z:5. Three separate transform owners that never fight —
+   .bg-grid::before (CSS pan), .bg-shape (JS scroll parallax), .bg-mark (CSS float). */
+.backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-grid{position:absolute;inset:0;
+  -webkit-mask-image:radial-gradient(125vw 105vh at 50% 28%,#000 32%,transparent 78%);
+  mask-image:radial-gradient(125vw 105vh at 50% 28%,#000 32%,transparent 78%)}
+/* Pan the inner layer, not .bg-grid — that keeps the mask on the parent still. */
+.bg-grid::before{content:"";position:absolute;inset:-66px;
+  background-image:linear-gradient(to right,rgba(26,23,18,.05) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(26,23,18,.05) 1px,transparent 1px);
+  background-size:66px 66px;animation:gridpan 34s linear infinite;will-change:transform}
+@keyframes gridpan{to{transform:translate3d(66px,66px,0)}}
+.bg-glow{position:absolute;top:0;left:0;width:56vw;height:56vw;max-width:760px;max-height:760px;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,74,28,.10),rgba(255,74,28,.035) 55%,transparent 72%);
+  opacity:0;transition:opacity .9s var(--ease);will-change:transform}
+body.bg-on .bg-glow{opacity:1}
+.bg-drift{position:absolute;inset:0;will-change:transform}
+.bg-shape{position:absolute;will-change:transform}
+.bg-mark{display:block;width:100%;height:100%;will-change:transform}
+.bg-shape.ring{top:11%;right:7%;width:min(34vw,360px);aspect-ratio:1}
+.bg-shape.ring .bg-mark{border:2px solid var(--accent);border-radius:50%;opacity:.16;animation:floaty 15s var(--ease) infinite}
+.bg-shape.ring.sm{top:auto;right:auto;bottom:15%;left:9%;width:min(16vw,150px)}
+.bg-shape.ring.sm .bg-mark{opacity:.22;animation-duration:11s;animation-delay:-3s}
+.bg-shape.square{top:63%;left:5%;width:min(12vw,118px);aspect-ratio:1}
+.bg-shape.square .bg-mark{background:var(--accent);border-radius:6px;opacity:.10;animation:floaty2 19s var(--ease) infinite}
+.bg-shape.plus{top:28%;left:11%;font-family:var(--font-display);font-size:clamp(64px,9vw,142px);line-height:1;color:var(--accent)}
+.bg-shape.plus .bg-mark{width:auto;height:auto;opacity:.16;animation:spin 30s linear infinite}
+.bg-shape.dot{top:20%;left:45%;width:15px;height:15px}
+.bg-shape.dot .bg-mark{background:var(--ink);border-radius:50%;opacity:.45;animation:floaty 9s var(--ease) infinite;animation-delay:-2s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+@keyframes floaty2{0%,100%{transform:translateY(0) rotate(12deg)}50%{transform:translateY(26px) rotate(12deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:640px){ .bg-shape.dot,.bg-shape.plus{display:none} }
+
 /* cursor */
 .cur-dot,.cur-ring{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;opacity:0;will-change:transform}
 body.cursor-on .cur-dot,body.cursor-on .cur-ring{opacity:1}
@@ -242,4 +278,5 @@ footer{padding:40px 0;border-top:1px solid var(--line);margin-top:10px}
   .reveal,.clip .ln{opacity:1!important;transform:none!important}
   html{scroll-behavior:auto}
   .marquee-skew{transform:none!important}
+  .bg-glow{display:none}
 }

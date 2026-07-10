@@ -1,5 +1,6 @@
 import Loader from "@/components/Loader";
 import Cursor from "@/components/Cursor";
+import Backdrop from "@/components/Backdrop";
 import Grain from "@/components/Grain";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
@@ -19,6 +20,7 @@ export default function Page() {
     <>
       <Loader />
       <Cursor />
+      <Backdrop />
       <Grain />
       <div className="content">
         <Nav />

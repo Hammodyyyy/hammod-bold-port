@@ -148,6 +148,68 @@ export default function SiteEffects() {
       });
     };
 
+    // ---------- Animated backdrop ----------
+    const buildBackdrop = () => {
+      // Scroll parallax: shapes are position:fixed, so they don't move with the
+      // page — translate them by scroll * speed to fake depth. Owns .bg-shape's
+      // transform; the float keyframes live on the inner .bg-mark, so no fight.
+      const shapes = gsap.utils.toArray(".bg-shape").map((el) => ({
+        set: gsap.quickSetter(el, "y", "px"),
+        speed: parseFloat(el.dataset.float) || 0.3,
+      }));
+      if (shapes.length) {
+        ScrollTrigger.create({
+          start: 0, end: "max",
+          onUpdate: (self) => {
+            const y = self.scroll();
+            shapes.forEach((s) => s.set(y * s.speed * 0.06));
+          },
+        });
+      }
+
+      // Pointer: glow trails the cursor, the whole shape field drifts a few px
+      // the opposite way for a parallax feel. Fine pointers only.
+      const glow = document.getElementById("bgGlow");
+      const drift = document.getElementById("bgDrift");
+      if (fine && glow) {
+        gsap.set(glow, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
+        const gx = gsap.quickTo(glow, "x", { duration: 0.9, ease: "power3" });
+        const gy = gsap.quickTo(glow, "y", { duration: 0.9, ease: "power3" });
+        const dx = drift ? gsap.quickTo(drift, "x", { duration: 1.1, ease: "power3" }) : null;
+        const dy = drift ? gsap.quickTo(drift, "y", { duration: 1.1, ease: "power3" }) : null;
+        const onBg = (e) => {
+          gx(e.clientX); gy(e.clientY);
+          if (dx) dx((e.clientX / window.innerWidth - 0.5) * -34);
+          if (dy) dy((e.clientY / window.innerHeight - 0.5) * -34);
+        };
+        window.addEventListener("pointermove", onBg, { passive: true });
+        document.body.classList.add("bg-on");
+        cleanups.push(() => {
+          window.removeEventListener("pointermove", onBg);
+          document.body.classList.remove("bg-on");
+        });
+      }
+    };
+
+    // ---------- Count-up stats ----------
+    // Splits "600M+" into prefix / number / suffix so the number ticks while the
+    // suffix stays put. Only runs in motion mode — the JSX already holds the final
+    // value, so no-JS and reduced-motion show it correctly without touching this.
+    const runCounters = () => {
+      gsap.utils.toArray(".hero-stats .v").forEach((el) => {
+        const m = el.textContent.trim().match(/^(\D*)(\d[\d,]*(?:\.\d+)?)(.*)$/);
+        if (!m) return;
+        const [, pre, numStr, suf] = m;
+        const target = parseFloat(numStr.replace(/,/g, ""));
+        const o = { v: 0 };
+        el.textContent = pre + "0" + suf;
+        gsap.to(o, {
+          v: target, duration: 1.5, ease: "power2.out",
+          onUpdate: () => { el.textContent = pre + Math.round(o.v).toLocaleString() + suf; },
+        });
+      });
+    };
+
     // ---------- FAQ accordion ----------
     // <details> snaps open natively. Intercept and animate the panel height,
     // keeping the open attribute set until a close finishes so content stays laid out.
@@ -200,7 +262,9 @@ export default function SiteEffects() {
         // Direct children only: `.hero-stats div` would also match .v and .l,
         // double-applying the fade and stretching the stagger across 9 nodes.
         .from(".hero-stats > div", { y: 20, opacity: 0, duration: 0.7, stagger: 0.08 }, 0.68)
-        .from(".hero-cta", { y: 20, opacity: 0, duration: 0.7 }, 0.8);
+        .from(".hero-cta", { y: 20, opacity: 0, duration: 0.7 }, 0.8)
+        // Kick the count-up as the stats fade in, so the numbers arrive live.
+        .add(runCounters, 0.72);
       return tl;
     };
 
@@ -233,6 +297,7 @@ export default function SiteEffects() {
 
       buildMotion();
       buildMarquee();
+      buildBackdrop();
       buildFAQ();
       buildScrollUI();
       ScrollTrigger.refresh();
