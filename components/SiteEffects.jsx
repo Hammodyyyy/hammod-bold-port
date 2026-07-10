@@ -127,6 +127,28 @@ export default function SiteEffects() {
       });
     }
 
+    // card spotlight — cursor-following glow, hover-only, fine pointers only
+    if (fine && !reduce) {
+      document.body.classList.add("glow-on");
+      const cards = Array.from(document.querySelectorAll(".card"));
+      let glowRaf = 0, active = null, cx = 0, cy = 0;
+      const apply = () => {
+        glowRaf = 0;
+        if (!active) return;
+        const r = active.getBoundingClientRect();
+        active.style.setProperty("--mx", (cx - r.left) + "px");
+        active.style.setProperty("--my", (cy - r.top) + "px");
+      };
+      const move = (e) => { active = e.currentTarget; cx = e.clientX; cy = e.clientY; if (!glowRaf) glowRaf = requestAnimationFrame(apply); };
+      const leave = (e) => { if (active === e.currentTarget) active = null; };
+      cards.forEach((c) => { c.addEventListener("pointermove", move); c.addEventListener("pointerleave", leave); });
+      cleanups.push(() => {
+        if (glowRaf) cancelAnimationFrame(glowRaf);
+        cards.forEach((c) => { c.removeEventListener("pointermove", move); c.removeEventListener("pointerleave", leave); });
+        document.body.classList.remove("glow-on");
+      });
+    }
+
     return () => {
       cleanups.forEach((fn) => { try { fn(); } catch (e) {} });
       ScrollTrigger.getAll().forEach((t) => t.kill());
