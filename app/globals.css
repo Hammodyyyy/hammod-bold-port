@@ -182,7 +182,12 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .case-body .ct{font-size:clamp(24px,3.2vw,34px);margin-bottom:6px}
 .case-body .cclient{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 .scope{display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}
-.scope .badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-2);border-radius:100px;padding:5px 10px}
+.scope .badge{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-2);border-radius:100px;padding:5px 10px;white-space:nowrap}
+/* mobile: stack title over badges so the scope chips wrap instead of overflowing */
+@media (max-width:560px){
+  .case-head{flex-direction:column;align-items:flex-start;gap:14px}
+  .case-body .ct{font-size:26px}
+}
 .case-block{margin-bottom:18px}
 .case-block .k{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
 .case-block .v{color:var(--muted);font-size:15px;line-height:1.6}
