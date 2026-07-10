@@ -126,7 +126,7 @@ export default function SiteEffects() {
       const loop = () => {
         rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
         ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-        if (glow) { gx += (mx - gx) * 0.12; gy += (my - gy) * 0.12; glow.style.transform = `translate3d(${gx}px,${gy}px,0) translate(-50%,-50%)`; }
+        if (glow) { gx += (mx - gx) * 0.14; gy += (my - gy) * 0.14; glow.style.setProperty("--gx", gx + "px"); glow.style.setProperty("--gy", gy + "px"); }
         rafId = requestAnimationFrame(loop);
       };
       loop();
