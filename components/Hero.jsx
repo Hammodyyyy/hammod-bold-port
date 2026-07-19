@@ -1,10 +1,13 @@
-import { hero } from "@/lib/data";
+import { hero, availability } from "@/lib/data";
 
 export default function Hero() {
   return (
     <header className="hero wrap" id="top">
       <div className="hero-eyebrow">
         <span className="eyebrow mono"><span className="dot"></span>{hero.eyebrow}</span>
+        {availability.open && (
+          <span className="avail"><span className="pip" aria-hidden="true"></span>{availability.label}</span>
+        )}
       </div>
       <h1>
         {hero.headline.map((line, i) => (

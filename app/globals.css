@@ -160,7 +160,13 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 
 /* hero */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:150px;padding-bottom:80px}
-.hero-eyebrow{margin-bottom:30px}
+.hero-eyebrow{margin-bottom:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+/* availability / scarcity signal */
+.avail{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  border:1px solid var(--line);border-radius:100px;padding:6px 13px;background:var(--panel)}
+.avail .pip{position:relative;width:8px;height:8px;border-radius:50%;background:#43d787;flex-shrink:0}
+.avail .pip::after{content:"";position:absolute;inset:0;border-radius:50%;background:#43d787;animation:pip 2.4s var(--ease) infinite}
+@keyframes pip{0%{transform:scale(1);opacity:.7}70%,100%{transform:scale(2.8);opacity:0}}
 .hero h1{font-size:clamp(44px,7.6vw,104px);letter-spacing:-.035em;line-height:1.02}
 .hero h1 .l2{color:var(--accent-2)}
 .hero-sub{max-width:600px;color:var(--muted);font-size:clamp(17px,2vw,20px);margin:30px 0 0;line-height:1.6}
@@ -269,6 +275,34 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .why{padding:var(--pad-card)}
 .why h3{font-size:18px;margin-bottom:10px}
 .why p{color:var(--muted);font-size:14.5px;line-height:1.6}
+
+/* specialties — "what I design", by system type */
+.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+@media (max-width:900px){ .spec-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:600px){ .spec-grid{grid-template-columns:1fr} }
+.spec{position:relative;padding:var(--pad-card);transition:transform var(--dur-card) var(--ease),box-shadow var(--dur-card) var(--ease),border-color var(--dur-card) var(--ease),background var(--dur-card) var(--ease);will-change:transform}
+.spec:hover{transform:translateY(-6px);background:var(--panel-2);border-color:var(--line-2);box-shadow:var(--shadow-lg);z-index:2}
+.spec .num{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--accent-2);margin-bottom:20px}
+.spec h3{font-size:19px;letter-spacing:-.02em;margin-bottom:10px}
+.spec p{color:var(--muted);font-size:14.5px;line-height:1.6}
+
+/* projects — light visual gallery */
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
+@media (max-width:700px){ .proj-grid{grid-template-columns:1fr} }
+.proj{position:relative;overflow:hidden;transition:transform var(--dur-card) var(--ease),box-shadow var(--dur-card) var(--ease),border-color var(--dur-card) var(--ease);will-change:transform}
+.proj:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:var(--shadow-lg);z-index:2}
+.proj .case-media{min-height:260px}
+@media (max-width:700px){ .proj .case-media{min-height:220px} }
+.proj-meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 18px}
+.proj-meta .pt{font-family:var(--font-display);font-weight:600;font-size:18px;letter-spacing:-.02em}
+.proj-meta .ptag{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+/* toolkit */
+.toolkit{display:flex;flex-wrap:wrap;gap:12px}
+.tool{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid var(--line);border-radius:100px;background:var(--panel);
+  font-size:14.5px;color:var(--muted);transition:color var(--dur-hover) var(--ease),border-color var(--dur-hover) var(--ease),background var(--dur-hover) var(--ease)}
+.tool:hover{color:var(--ink);border-color:var(--line-2);background:var(--panel-2)}
+.tool .tdot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
 
 /* testimonials — quiet, supporting, never competing with the work */
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
