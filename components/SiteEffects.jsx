@@ -155,9 +155,10 @@ export default function SiteEffects() {
     // 3D tilt on cards — the area under the cursor recedes slightly
     if (fine && !reduce) {
       const MAX = 6; // degrees
-      const tiltEls = document.querySelectorAll(".card");
+      const tiltEls = document.querySelectorAll(".card, .q, .contact");
       const tiltHandlers = [];
       tiltEls.forEach((el) => {
+        const noScale = el.classList.contains("contact"); // big band: rotate only
         let raf = 0, cx = 0, cy = 0;
         const move = (e) => {
           cx = e.clientX; cy = e.clientY;
@@ -167,7 +168,8 @@ export default function SiteEffects() {
             const r = el.getBoundingClientRect();
             const px = (cx - (r.left + r.width / 2)) / (r.width / 2);
             const py = (cy - (r.top + r.height / 2)) / (r.height / 2);
-            el.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) scale(1.015)`;
+            const persp = Math.max(900, r.width * 1.8); // scale perspective to size
+            el.style.transform = `perspective(${persp.toFixed(0)}px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) scale(${noScale ? 1 : 1.015})`;
           });
         };
         const enter = () => { el.style.transition = "transform .12s ease-out, box-shadow var(--dur-card) var(--ease)"; };
