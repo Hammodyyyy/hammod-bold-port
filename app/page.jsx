@@ -26,8 +26,8 @@ export default function Page() {
         <Nav />
         <Hero />
         <TrustedBy />
-        <Specialties />
         <Projects />
+        <Specialties />
         <Services />
         <Process />
         <WhyMe />
