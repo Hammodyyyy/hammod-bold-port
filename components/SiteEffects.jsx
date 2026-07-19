@@ -152,6 +152,37 @@ export default function SiteEffects() {
       });
     }
 
+    // 3D tilt on cards — the area under the cursor recedes slightly
+    if (fine && !reduce) {
+      const MAX = 6; // degrees
+      const tiltEls = document.querySelectorAll(".card");
+      const tiltHandlers = [];
+      tiltEls.forEach((el) => {
+        let raf = 0, cx = 0, cy = 0;
+        const move = (e) => {
+          cx = e.clientX; cy = e.clientY;
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            const r = el.getBoundingClientRect();
+            const px = (cx - (r.left + r.width / 2)) / (r.width / 2);
+            const py = (cy - (r.top + r.height / 2)) / (r.height / 2);
+            el.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) scale(1.015)`;
+          });
+        };
+        const enter = () => { el.style.transition = "transform .12s ease-out, box-shadow var(--dur-card) var(--ease)"; };
+        const leave = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } el.style.transition = "transform .5s var(--ease), box-shadow var(--dur-card) var(--ease)"; el.style.transform = ""; };
+        el.addEventListener("pointerenter", enter);
+        el.addEventListener("pointermove", move);
+        el.addEventListener("pointerleave", leave);
+        tiltHandlers.push([el, enter, move, leave]);
+      });
+      cleanups.push(() => tiltHandlers.forEach(([el, en, mv, lv]) => {
+        el.removeEventListener("pointerenter", en); el.removeEventListener("pointermove", mv); el.removeEventListener("pointerleave", lv);
+        el.style.transform = ""; el.style.transition = "";
+      }));
+    }
+
     return () => {
       cleanups.forEach((fn) => { try { fn(); } catch (e) {} });
       ScrollTrigger.getAll().forEach((t) => t.kill());
