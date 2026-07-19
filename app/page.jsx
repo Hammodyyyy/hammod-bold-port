@@ -1,5 +1,6 @@
 import Loader from "@/components/Loader";
 import Cursor from "@/components/Cursor";
+import Aurora from "@/components/Aurora";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import TrustedBy from "@/components/TrustedBy";
@@ -20,6 +21,7 @@ export default function Page() {
     <>
       <Loader />
       <Cursor />
+      <Aurora />
       <div className="content">
         <Nav />
         <Hero />
