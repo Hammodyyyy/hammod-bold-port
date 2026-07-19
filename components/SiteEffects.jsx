@@ -171,7 +171,7 @@ export default function SiteEffects() {
           });
         };
         const enter = () => { el.style.transition = "transform .12s ease-out, box-shadow var(--dur-card) var(--ease)"; };
-        const leave = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } el.style.transition = "transform .5s var(--ease), box-shadow var(--dur-card) var(--ease)"; el.style.transform = ""; };
+        const leave = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } el.style.transition = "transform .5s var(--ease), box-shadow var(--dur-card) var(--ease)"; el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)"; };
         el.addEventListener("pointerenter", enter);
         el.addEventListener("pointermove", move);
         el.addEventListener("pointerleave", leave);
