@@ -297,12 +297,17 @@ nav.small{padding:11px 0;background:rgba(8,8,10,.7);backdrop-filter:blur(16px) s
 .proj-meta .pt{font-family:var(--font-display);font-weight:600;font-size:18px;letter-spacing:-.02em}
 .proj-meta .ptag{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 
-/* toolkit */
-.toolkit{display:flex;flex-wrap:wrap;gap:12px}
-.tool{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid var(--line);border-radius:100px;background:var(--panel);
-  font-size:14.5px;color:var(--muted);transition:color var(--dur-hover) var(--ease),border-color var(--dur-hover) var(--ease),background var(--dur-hover) var(--ease)}
-.tool:hover{color:var(--ink);border-color:var(--line-2);background:var(--panel-2)}
-.tool .tdot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
+/* toolkit — brand icon cards */
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+@media (max-width:680px){ .tool-grid{grid-template-columns:1fr} }
+.tool-card{display:flex;align-items:center;gap:15px;padding:22px 24px;position:relative;
+  transition:transform var(--dur-card) var(--ease),box-shadow var(--dur-card) var(--ease),border-color var(--dur-card) var(--ease),background var(--dur-card) var(--ease);will-change:transform}
+.tool-card:hover{transform:translateY(-5px);border-color:var(--line-2);background:var(--panel-2);box-shadow:var(--shadow-lg);z-index:2}
+.tool-ico{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:13px;background:var(--panel-2);border:1px solid var(--line)}
+.tool-ico svg{display:block}
+.tool-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tool-name{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:-.02em;color:var(--ink)}
+.tool-role{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
 /* testimonials — quiet, supporting, never competing with the work */
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
