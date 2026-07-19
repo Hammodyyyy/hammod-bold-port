@@ -11,7 +11,7 @@ const ICONS = {
     </svg>
   ),
   roblox: (
-    <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" fill="#f5f5f7" fillRule="evenodd" clipRule="evenodd">
+    <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" fill="#17171a" fillRule="evenodd" clipRule="evenodd">
       <path d="M5.164 0 0 18.927 18.836 24 24 5.073 5.164 0Zm5.947 7.66 5.234 1.401-1.401 5.234-5.234-1.401 1.401-5.234Z" />
     </svg>
   ),

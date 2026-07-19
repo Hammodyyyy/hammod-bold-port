@@ -10,7 +10,7 @@ export default function WhyMe() {
       </div>
       <div className="why-grid">
         {why.map((w, i) => (
-          <div className="why card reveal" key={i}>
+          <div className="why reveal" key={i}>
             <h3>{w.h}</h3>
             <p>{w.p}</p>
           </div>

@@ -29,7 +29,7 @@ export default function Process() {
       </div>
       <div className="proc-grid">
         {process.map((p) => (
-          <div className="proc reveal" key={p.n}>
+          <div className="proc card reveal" key={p.n}>
             <div className="proc-top">
               <Icon name={p.key} />
               <span className="pn">{p.n}</span>
