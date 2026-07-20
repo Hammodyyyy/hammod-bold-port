@@ -22,7 +22,7 @@ export default function Projects() {
         <p className="reveal">UI I&apos;ve designed and built for live Roblox games. Hover to pause, click any shot to see it full-size.</p>
       </div>
 
-      <div className="proj-marquee reveal">
+      <div className="proj-marquee">
         <div className="proj-track">
           {set("a")}
           {set("b")}

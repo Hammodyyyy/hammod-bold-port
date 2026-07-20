@@ -13,8 +13,10 @@ export default function SiteEffects() {
     let lenis = null;
     let rafId = 0;
     const cleanups = [];
+    // Lenis smooth-scroll is desktop-only; native scroll on touch avoids jank/lock issues
+    const touch = window.matchMedia("(hover: none)").matches;
 
-    if (!reduce) {
+    if (!reduce && !touch) {
       try {
         lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
         lenis.on("scroll", ScrollTrigger.update);
@@ -24,11 +26,13 @@ export default function SiteEffects() {
         cleanups.push(() => gsap.ticker.remove(tick));
       } catch (e) { lenis = null; }
     }
+    const lockScroll = () => { if (lenis) lenis.stop(); else document.documentElement.style.overflow = "hidden"; };
+    const unlockScroll = () => { if (lenis) lenis.start(); else document.documentElement.style.overflow = ""; };
 
     const nav = document.getElementById("nav");
     const navLinks = document.getElementById("navLinks");
     const burger = document.getElementById("burger");
-    const closeMenu = () => { navLinks && navLinks.classList.remove("open"); burger && burger.classList.remove("open"); if (lenis) lenis.start(); };
+    const closeMenu = () => { navLinks && navLinks.classList.remove("open"); burger && burger.classList.remove("open"); unlockScroll(); };
 
     const anchorHandlers = [];
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -46,7 +50,7 @@ export default function SiteEffects() {
     const loader = document.getElementById("loader");
     const lnum = document.getElementById("lnum");
     const lbar = document.getElementById("lbar");
-    if (lenis) lenis.stop();
+    lockScroll();
 
     const heroIn = () => {
       if (reduce) { document.querySelectorAll(".reveal").forEach((r) => { r.style.opacity = 1; r.style.transform = "none"; }); return; }
@@ -87,16 +91,16 @@ export default function SiteEffects() {
     };
 
     const finish = () => {
-      if (reduce) { if (loader) loader.style.display = "none"; if (lenis) lenis.start(); heroIn(); buildScroll(); return; }
-      gsap.to(loader, { yPercent: -100, duration: 0.9, ease: "power4.inOut", delay: 0.2, onComplete: () => {
-        if (loader) loader.style.display = "none"; if (lenis) lenis.start(); heroIn(); buildScroll();
+      if (reduce) { if (loader) loader.style.display = "none"; unlockScroll(); heroIn(); buildScroll(); return; }
+      gsap.to(loader, { yPercent: -100, duration: 0.6, ease: "power4.inOut", delay: 0.1, onComplete: () => {
+        if (loader) loader.style.display = "none"; unlockScroll(); heroIn(); buildScroll();
       }});
     };
 
     if (reduce) { if (lnum) lnum.textContent = "[ 100 ]"; if (lbar) lbar.style.width = "100%"; finish(); }
     else {
       const p = { v: 0 };
-      gsap.to(p, { v: 100, duration: 1.6, ease: "power2.inOut",
+      gsap.to(p, { v: 100, duration: 1.05, ease: "power2.inOut",
         onUpdate: () => { const n = Math.round(p.v); if (lnum) lnum.textContent = `[ ${String(n).padStart(3, "0")} ]`; if (lbar) lbar.style.width = n + "%"; },
         onComplete: finish });
     }
@@ -107,7 +111,7 @@ export default function SiteEffects() {
 
     const onBurger = () => {
       if (navLinks.classList.contains("open")) closeMenu();
-      else { navLinks.classList.add("open"); burger.classList.add("open"); if (lenis) lenis.stop(); }
+      else { navLinks.classList.add("open"); burger.classList.add("open"); lockScroll(); }
     };
     if (burger) { burger.addEventListener("click", onBurger); cleanups.push(() => burger.removeEventListener("click", onBurger)); }
 
@@ -189,6 +193,7 @@ export default function SiteEffects() {
       cleanups.forEach((fn) => { try { fn(); } catch (e) {} });
       ScrollTrigger.getAll().forEach((t) => t.kill());
       if (lenis) { try { lenis.destroy(); } catch (e) {} }
+      document.documentElement.style.overflow = "";
     };
   }, []);
 

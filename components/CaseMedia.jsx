@@ -22,7 +22,7 @@ export default function CaseMedia({ img, video, title, kind }) {
   const inline = video ? (
     <video src={video} poster={img} autoPlay muted loop playsInline />
   ) : (
-    <img src={img} alt={`${title} — ${kind}`} loading="lazy" />
+    <img src={img} alt={`${title} — ${kind}`} />
   );
 
   return (
