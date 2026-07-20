@@ -2,10 +2,10 @@ import { projects } from "@/lib/data";
 import CaseMedia from "@/components/CaseMedia";
 
 export default function Projects() {
-  // rendered twice so the marquee loops seamlessly (-50% translate)
+  // rendered 3x so the loop always fills the viewport and cycles seamlessly
   const set = (dupe) =>
     projects.map((p, i) => (
-      <div className="proj card" key={`${dupe}-${i}`} aria-hidden={dupe === "b" ? "true" : undefined}>
+      <div className="proj card" key={`${dupe}-${i}`} aria-hidden={dupe !== "a" ? "true" : undefined}>
         <CaseMedia img={p.img} video={p.video} title={p.title} kind={p.tag} />
         <div className="proj-meta">
           <span className="pt">{p.title}</span>
@@ -26,6 +26,7 @@ export default function Projects() {
         <div className="proj-track">
           {set("a")}
           {set("b")}
+          {set("c")}
         </div>
       </div>
     </section>
