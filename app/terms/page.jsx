@@ -27,7 +27,7 @@ const SECTIONS = [
   {
     h: "Scope changes",
     p: [
-      "Scope is measured in UI systems. Complex systems such as skill trees, quest hubs, crafting, and trading count as 1.5 toward your package.",
+      "Scope is measured in UI systems. Larger systems such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we agree on where they land before the project starts.",
       "Systems added beyond your package are quoted before any extra work starts. Nothing is added to your invoice without your say-so.",
     ],
   },
