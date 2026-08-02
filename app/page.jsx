@@ -7,8 +7,7 @@ import TrustedBy from "@/components/TrustedBy";
 import Specialties from "@/components/Specialties";
 import Projects from "@/components/Projects";
 import Services from "@/components/Services";
-import Process from "@/components/Process";
-import WhyMe from "@/components/WhyMe";
+import HowItWorks from "@/components/HowItWorks";
 import Toolkit from "@/components/Toolkit";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
@@ -28,11 +27,10 @@ export default function Page() {
         <TrustedBy />
         <Projects />
         <Specialties />
-        <Services />
-        <Process />
-        <WhyMe />
-        <Toolkit />
         <Testimonials />
+        <HowItWorks />
+        <Services />
+        <Toolkit />
         <FAQ />
         <Contact />
         <Footer />

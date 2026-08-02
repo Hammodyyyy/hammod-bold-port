@@ -64,6 +64,9 @@ export default function SiteEffects() {
     const buildScroll = () => {
       if (reduce) {
         gsap.utils.toArray(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
+        // no scrubbing, so show the spine already walked rather than blank
+        document.querySelectorAll(".tl-node").forEach((n) => n.classList.add("on"));
+        document.querySelectorAll(".tl-fill").forEach((f) => { f.style.transform = "scaleY(1)"; });
         return;
       }
       // gentle fade + rise, staggered as each cluster of elements scrolls in
@@ -76,6 +79,37 @@ export default function SiteEffects() {
         if (el.closest(".hero")) return;
         gsap.from(el, { yPercent: 112, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
       });
+      // The footer sits ~55px off the page bottom, so on any viewport taller
+      // than ~550px its top can never climb to the batch's 90% line and it
+      // would stay at opacity 0 forever. Give it a reachable trigger.
+      const foot = document.querySelector(".foot.reveal");
+      if (foot) {
+        ScrollTrigger.create({
+          trigger: foot, start: "top bottom",
+          onEnter: () => gsap.to(foot, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", overwrite: true }),
+        });
+      }
+
+      // timeline spine: each node lights as it passes, and the rail below it
+      // fills while that step scrolls through
+      gsap.utils.toArray(".tl-step").forEach((step) => {
+        const node = step.querySelector(".tl-node");
+        const fill = step.querySelector(".tl-fill");
+        if (node) {
+          ScrollTrigger.create({
+            trigger: step, start: "top 60%",
+            onEnter: () => node.classList.add("on"),
+            onLeaveBack: () => node.classList.remove("on"),
+          });
+        }
+        if (fill) {
+          gsap.to(fill, {
+            scaleY: 1, ease: "none",
+            scrollTrigger: { trigger: step, start: "top 60%", end: "bottom 60%", scrub: true },
+          });
+        }
+      });
+
       // safety net: reveal anything already at/above the fold (e.g. reload mid-page)
       requestAnimationFrame(() => {
         gsap.utils.toArray(".reveal").forEach((el) => {

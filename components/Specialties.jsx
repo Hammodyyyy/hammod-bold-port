@@ -6,7 +6,7 @@ export default function Specialties() {
       <div className="sec-head">
         <span className="eyebrow mono reveal"><span className="dot"></span>What I Design</span>
         <h2 className="reveal">Whatever your game needs on screen.</h2>
-        <p className="reveal">From the shop that drives your revenue to the HUD players stare at all match — I design and build the systems that carry your game.</p>
+        <p className="reveal">From the shop that drives your revenue to the HUD players stare at all match, I design and build the systems that carry your game.</p>
       </div>
       <div className="spec-grid">
         {specialties.map((s) => (

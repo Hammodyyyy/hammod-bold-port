@@ -121,7 +121,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:18px 0;transition:pa
 nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(16px) saturate(1.4);border-color:var(--line);box-shadow:0 1px 0 rgba(20,20,28,.02)}
 .nav-in{display:flex;align-items:center;justify-content:space-between}
 .brand{font-family:var(--font-display);font-weight:600;font-size:18px;letter-spacing:-.03em;display:flex;align-items:center;gap:9px}
-.brand .sq{width:10px;height:10px;background:var(--accent);border-radius:3px}
+.brand-av{width:30px;height:30px;border-radius:50%;object-fit:cover;display:block;flex-shrink:0;
+  background:var(--bg-2);border:1px solid var(--line)}
 .nav-links{display:flex;gap:4px;align-items:center}
 .nav-links a{font-family:var(--font-body);font-size:14px;color:var(--muted);padding:8px 13px;border-radius:9px;transition:color var(--dur-hover),background var(--dur-hover)}
 .nav-links a:hover{color:var(--ink);background:var(--panel-2)}
@@ -138,6 +139,8 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
   .nav-links a{font-family:var(--font-display);font-size:24px;font-weight:600}
   .nav-links .nav-cta{margin-top:10px;padding:13px 26px}
   .burger{display:flex;z-index:901}
+  /* keep the avatar and wordmark above the open menu overlay, same as burger */
+  .brand{position:relative;z-index:901}
 }
 
 /* buttons */
@@ -206,10 +209,12 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .lightbox-close:hover{background:var(--accent);transform:scale(1.05);border-color:transparent}
 
 /* specialties — "what I design", by system type */
-.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
-@media (max-width:900px){ .spec-grid{grid-template-columns:1fr 1fr} }
-@media (max-width:600px){ .spec-grid{grid-template-columns:1fr} }
-.spec{padding:var(--pad-card)}
+/* flex, not grid: an incomplete last row centres itself instead of leaving a
+   hole on the right. Card widths match the old 3-up grid exactly. */
+.spec-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--gap)}
+.spec{padding:var(--pad-card);flex:0 1 calc((100% - var(--gap) * 2) / 3)}
+@media (max-width:900px){ .spec{flex-basis:calc((100% - var(--gap)) / 2)} }
+@media (max-width:600px){ .spec{flex-basis:100%} }
 .spec:hover{transform:translateY(-6px)}
 .spec .num{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--accent-2);margin-bottom:20px}
 .spec h3{font-size:19px;letter-spacing:-.02em;margin-bottom:10px}
@@ -249,34 +254,42 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .svc.hot .sbtn a{background:#fff;color:var(--accent);border:0;box-shadow:0 8px 22px rgba(0,0,0,.16)}
 .svc.hot .sbtn a:hover{filter:brightness(.97);background:#fff;color:var(--accent)}
 .svc .price{font-family:var(--font-display);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:14px 0 4px}
+.svc .price .unit{font-family:var(--font-body);font-weight:500;font-size:14px;letter-spacing:-.01em;color:var(--faint);margin-left:5px}
+.svc.hot .price .unit{color:rgba(255,255,255,.75)}
 .svc .forwho{color:var(--faint);font-size:13.5px;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}
 .svc ul{list-style:none;display:flex;flex-direction:column;gap:13px;flex:1}
 .svc li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:var(--ink)}
 .svc li svg{flex-shrink:0;margin-top:3px;color:var(--accent)}
 .svc .sbtn{margin-top:26px}
 .svc .sbtn a{width:100%;justify-content:center}
-.premium-note{margin:var(--gap) auto 0;color:var(--faint);font-size:14.5px;line-height:1.6;max-width:var(--measure);text-align:center}
-.premium-note b{color:var(--muted);font-weight:600}
+.scope-note{margin:calc(var(--gap) + 10px) auto 0;color:var(--muted);font-size:16px;line-height:1.6;max-width:var(--measure);text-align:center}
+.scope-note b{color:var(--ink);font-weight:600}
+.scope-note a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;transition:color var(--dur-hover)}
+.scope-note a:hover{color:var(--ink)}
 
-/* process */
-.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
-@media (max-width:820px){ .proc-grid{grid-template-columns:1fr} }
-.proc{padding:clamp(28px,3vw,38px)}
-.proc:hover{transform:translateY(-6px)}
-.proc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
-.proc-ico{width:26px;height:26px;color:var(--accent)}
-.proc-ico svg{width:100%;height:100%;display:block}
-.proc .pn{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;color:var(--faint)}
-.proc h3{font-size:20px;margin-bottom:11px}
-.proc p{color:var(--muted);font-size:14.5px;line-height:1.6}
-
-/* why me — borderless list (breaks the boxed-grid rhythm) */
-.why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 48px}
-@media (max-width:760px){ .why-grid{grid-template-columns:1fr} }
-.why{padding:26px 0;border-top:1px solid var(--line)}
-.why h3{font-size:18px;margin-bottom:9px;display:flex;align-items:center;gap:10px}
-.why h3::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.why p{color:var(--muted);font-size:14.5px;line-height:1.6;padding-left:17px}
+/* how it works — left-aligned step timeline
+   --tl-x is the spine's centre line; the node offset is derived from the card
+   padding + half the numeral so nodes always line up with their number. */
+.tl{--tl-pad:32px;--tl-num:56px;--tl-col:52px;--tl-gap:20px;--tl-x:8px;
+  --tl-node-y:calc(var(--tl-pad) + var(--tl-num) / 2);
+  max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:var(--tl-gap)}
+.tl-step{position:relative;padding-left:var(--tl-col)}
+.tl-node{position:absolute;left:var(--tl-x);top:var(--tl-node-y);width:11px;height:11px;margin:-5.5px 0 0 -5.5px;
+  border-radius:50%;background:var(--line-2);z-index:1;
+  transition:background var(--dur-card) var(--ease),box-shadow var(--dur-card) var(--ease)}
+.tl-node.on{background:var(--accent);box-shadow:0 0 0 4px var(--accent-wash)}
+/* runs from this node down to the next one, so the spine ends at the last node */
+.tl-rail{position:absolute;left:var(--tl-x);width:2px;margin-left:-1px;top:var(--tl-node-y);
+  bottom:calc(-1 * (var(--tl-gap) + var(--tl-node-y)));background:var(--line);overflow:hidden}
+.tl-step:last-child .tl-rail{display:none}
+.tl-fill{display:block;width:100%;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:top}
+.tl-card{padding:var(--tl-pad);max-width:560px}
+.tl-num{display:block;font-family:var(--font-display);font-weight:600;font-size:var(--tl-num);line-height:1;
+  letter-spacing:-.03em;color:var(--ink);opacity:.12;margin-bottom:12px}
+.tl-card h3{font-size:21px;margin-bottom:10px}
+.tl-card p{color:var(--muted);font-size:15px;line-height:1.65}
+@media (max-width:760px){ .tl{--tl-pad:26px;--tl-num:46px;--tl-col:38px;--tl-x:6px} .tl-card h3{font-size:19px} }
+@media (max-width:480px){ .tl{--tl-pad:22px;--tl-num:40px;--tl-col:26px;--tl-x:4px;--tl-gap:16px} }
 
 /* toolkit — brand icon cards */
 .tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
@@ -289,17 +302,40 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .tool-name{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:-.02em;color:var(--ink)}
 .tool-role{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
-/* testimonials */
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
-@media (max-width:820px){ .quotes{grid-template-columns:1fr} }
-.q{padding:28px;display:flex;flex-direction:column;gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.q .stars{color:var(--accent);font-size:13px;letter-spacing:2px}
-.q .qt{font-size:15px;line-height:1.6;color:var(--muted)}
-.q .who{display:flex;align-items:center;gap:11px;margin-top:auto}
-.q .av{width:36px;height:36px;border-radius:50%;overflow:hidden;position:relative;background:var(--bg-2);flex-shrink:0;border:1px solid var(--line)}
+/* testimonials — one review at a time, auto-advancing */
+.quotes{max-width:720px;margin:0 auto}
+/* slides share one grid cell, so the card height is the tallest quote and
+   never jumps as it rotates */
+.q-stage{display:grid}
+.q-stage>.q{grid-area:1/1}
+.q{padding:var(--pad-card);display:flex;flex-direction:column;gap:20px;min-height:236px;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+  transition:opacity var(--dur-card) var(--ease),transform var(--dur-card) var(--ease),visibility var(--dur-card),
+    box-shadow var(--dur-card) var(--ease),border-color var(--dur-card) var(--ease)}
+.q.on{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.q .who{display:flex;align-items:center;gap:13px}
+.q .av{width:46px;height:46px;border-radius:50%;overflow:hidden;position:relative;background:var(--bg-2);flex-shrink:0;border:1px solid var(--line)}
 .q .av img{width:100%;height:100%;object-fit:cover}
-.q .nm{font-family:var(--font-body);font-weight:600;font-size:13.5px;color:var(--ink)}
-.q .rl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-top:2px}
+.q .nm{font-family:var(--font-body);font-weight:600;font-size:15px;color:var(--ink)}
+.q .rl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin-top:3px}
+.q .qt{font-size:16.5px;line-height:1.65;color:var(--muted)}
+.q .stars{display:flex;gap:3px;margin-top:auto;color:var(--line-2)}
+.q .stars svg.on{color:var(--accent)}
+
+/* controls: arrows flanking the dot count */
+.q-ctl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:26px}
+.q-arrow{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:var(--panel);border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow);cursor:pointer;
+  transition:background var(--dur-btn) var(--ease),color var(--dur-btn) var(--ease),border-color var(--dur-btn) var(--ease),transform var(--dur-hover) var(--ease)}
+.q-arrow:hover{background:var(--accent);border-color:transparent;color:var(--accent-ink);transform:scale(1.06)}
+.q-dots{display:flex;align-items:center;gap:7px}
+.q-dot{position:relative;width:7px;height:7px;border-radius:100px;border:0;padding:0;background:var(--line-2);cursor:pointer;
+  transition:width var(--dur-card) var(--ease),background var(--dur-card) var(--ease)}
+/* keeps the dot small but the tap target thumb-sized */
+.q-dot::after{content:"";position:absolute;inset:-16px -6px}
+.q-dot:hover{background:var(--faint)}
+.q-dot.on{width:22px;background:var(--accent)}
+@media (max-width:520px){ .q{min-height:280px} }
 
 /* faq */
 .faq{border-top:1px solid var(--line);max-width:820px;margin:0 auto}
@@ -326,6 +362,8 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .contact .btn-fill:hover{filter:brightness(.97);background:#fff;color:var(--accent);box-shadow:0 12px 30px rgba(0,0,0,.22)}
 .contact .btn-line{border-color:rgba(255,255,255,.42);color:#fff;background:transparent}
 .contact .btn-line:hover{background:rgba(255,255,255,.14);border-color:#fff}
+.contact :focus-visible{outline-color:#fff}
+.contact .reply{margin-top:20px;color:rgba(255,255,255,.72);font-size:11px;letter-spacing:.08em}
 .contact .socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:44px;padding-top:32px;border-top:1px solid rgba(255,255,255,.18)}
 .contact .socials a{display:inline-flex;align-items:center;gap:9px;
   font-family:var(--font-mono);font-size:11.5px;letter-spacing:.04em;color:rgba(255,255,255,.85);
@@ -338,7 +376,29 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .contact .socials a:hover .s-handle{color:#fff}
 
 footer{padding:38px 0;border-top:1px solid var(--line)}
-.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.foot-end{display:flex;align-items:center;gap:16px}
+.foot-link{color:var(--faint);transition:color var(--dur-hover)}
+.foot-link:hover{color:var(--accent-2)}
+.foot-socials{display:flex;align-items:center;gap:12px}
+.foot-socials a{display:flex;color:var(--faint);transition:color var(--dur-hover)}
+.foot-socials a:hover{color:var(--accent)}
+.foot-socials .s-ico{width:14px;height:14px;display:block}
+
+/* terms and other standalone doc pages */
+.doc-page .reveal{opacity:1;transform:none}
+.doc{max-width:720px;padding-top:clamp(70px,9vw,110px)}
+.doc-back{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);transition:color var(--dur-hover)}
+.doc-back:hover{color:var(--accent-2)}
+.doc h1{font-size:clamp(38px,6vw,60px);margin:22px 0 0}
+.doc-lead{color:var(--muted);font-size:18px;margin-top:18px;max-width:var(--measure)}
+.doc-sec{margin-top:clamp(34px,4vw,46px);border-top:1px solid var(--line);padding-top:24px}
+.doc-sec h2{font-size:21px;margin-bottom:12px}
+.doc-sec p{color:var(--muted);font-size:15.5px;line-height:1.7}
+.doc-sec p + p{margin-top:12px}
+.doc-foot{margin-top:clamp(40px,5vw,56px);color:var(--faint);font-size:14px}
+.doc-foot a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.doc-foot a:hover{color:var(--ink)}
 
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
