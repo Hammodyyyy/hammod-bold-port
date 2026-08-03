@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────────
-   DESIGN SYSTEM — light, clean, professional
+   DESIGN SYSTEM: light, clean, professional
    Soft off-white canvas · white cards + soft shadows · centered
    section headers · one dark contrast band · restrained indigo accent.
    ───────────────────────────────────────────────────────────── */
@@ -19,7 +19,7 @@
   --faint:#84848c;      /* AA small labels on --bg */
   --line:rgba(20,20,28,.10);
   --line-2:rgba(20,20,28,.17);
-  --accent:#5b4bff;     /* indigo — used sparingly */
+  --accent:#5b4bff;     /* indigo, used sparingly */
   --accent-2:#4a3ae0;   /* readable indigo for accent text on light */
   --accent-ink:#ffffff;
   --accent-wash:rgba(91,75,255,.09);
@@ -28,7 +28,7 @@
   --band:#141418;
   --band-accent:#a99bff;
 
-  /* motion — one easing curve everywhere */
+  /* motion: one easing curve everywhere */
   --ease:cubic-bezier(.22,1,.36,1);
   --dur-hover:180ms;
   --dur-btn:200ms;
@@ -36,7 +36,7 @@
   --dur-reveal:500ms;
   --dur-cursor:120ms;
 
-  /* shadow — soft, diffuse */
+  /* shadow: soft, diffuse */
   --shadow:0 6px 20px rgba(20,20,40,.06);
   --shadow-lg:0 24px 55px rgba(20,20,40,.12);
 
@@ -57,7 +57,7 @@ html.lenis,html.lenis body{height:auto}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body),system-ui,sans-serif;font-size:17px;line-height:1.6;letter-spacing:-.006em;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 ::selection{background:var(--accent);color:var(--accent-ink)}
 
-/* ambient background — slow-drifting aurora blobs for gentle life */
+/* ambient background: slow-drifting aurora blobs for gentle life */
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .aurora .blob{position:absolute;border-radius:50%;filter:blur(90px)}
 .aurora .b1{width:48vw;height:48vw;top:-12vw;left:-8vw;
@@ -70,7 +70,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body),system-u
 @keyframes drift2{to{transform:translate3d(-10vw,11vh,0) scale(1.12)}}
 @keyframes drift3{to{transform:translate3d(9vw,-10vh,0) scale(1.22)}}
 
-/* soft grid texture — faint, fades toward the edges */
+/* soft grid texture: faint, fades toward the edges */
 body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
     linear-gradient(to right, rgba(20,20,28,.045) 1px, transparent 1px),
@@ -150,7 +150,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .btn-line{border:1px solid var(--line-2);color:var(--ink);background:var(--panel)}
 .btn-line:hover{background:var(--panel-2);border-color:var(--ink)}
 
-/* section rhythm — centered heads, generous whitespace */
+/* section rhythm: centered heads, generous whitespace */
 .sec{padding-top:var(--sec-pad);padding-bottom:var(--sec-pad)}
 .sec-head{max-width:640px;margin:0 auto clamp(50px,6vw,70px);text-align:center}
 .sec-head .eyebrow{margin-bottom:20px}
@@ -162,7 +162,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .card{position:relative;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);box-shadow:var(--shadow);transition:border-color var(--dur-card) var(--ease),background var(--dur-card) var(--ease),transform var(--dur-card) var(--ease),box-shadow var(--dur-card) var(--ease)}
 .card:hover{border-color:var(--line-2);box-shadow:var(--shadow-lg);z-index:2}
 
-/* hero — left-aligned, distinct from the centered sections */
+/* hero: left-aligned, distinct from the centered sections */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:150px;padding-bottom:80px}
 .hero-eyebrow{margin-bottom:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .avail{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
@@ -186,6 +186,21 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .trusted .name{font-family:var(--font-display);font-weight:600;font-size:clamp(19px,2.2vw,24px);letter-spacing:-.03em;color:var(--muted);transition:color var(--dur-hover)}
 .trusted .client:hover .name{color:var(--ink)}
 
+/* studio demo: the proof section. Deliberately roomier than the rest so the
+   recording is the first thing the eye lands on after the hero. */
+#demo{padding-top:clamp(70px,8.5vw,120px);padding-bottom:clamp(70px,8.5vw,120px)}
+.demo-frame{position:relative;max-width:1000px;margin:0 auto;aspect-ratio:16 / 9;
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  background:var(--bg-2);box-shadow:var(--shadow-lg)}
+.demo-video{width:100%;height:100%;object-fit:cover;display:block}
+/* placeholder occupies the same box the recording will, so adding the file
+   later cannot shift the page */
+.demo-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:var(--faint);letter-spacing:.18em;
+  background:
+    repeating-linear-gradient(135deg, rgba(20,20,28,.03) 0 11px, transparent 11px 22px),
+    var(--panel-2)}
+
 /* shared clickable framed media (used by projects) + lightbox */
 .case-media{position:relative;display:block;width:100%;overflow:hidden;background:var(--bg-2);min-height:360px;
   border:0;margin:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer;
@@ -197,18 +212,24 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
   border-radius:10px;background:rgba(10,10,14,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);color:#fff;
   opacity:0;transform:translateY(6px);transition:opacity var(--dur-card) var(--ease),transform var(--dur-card) var(--ease);pointer-events:none}
 .case-media:hover .media-expand,.case-media:focus-visible .media-expand{opacity:1;transform:translateY(0)}
-.lightbox{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:clamp(16px,4vw,56px);
+/* touch has no hover, so the expand hint would never appear: pin it visible */
+@media (hover:none){ .media-expand{opacity:1;transform:none} }
+.lightbox{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:clamp(14px,3vw,44px);
   background:rgba(10,10,14,.8);backdrop-filter:blur(10px);animation:lbfade .25s var(--ease)}
 @keyframes lbfade{from{opacity:0}to{opacity:1}}
-.lightbox-inner{max-width:1100px;width:100%;max-height:100%;display:flex;flex-direction:column;gap:14px;cursor:default}
-.lightbox-inner img,.lightbox-inner video{width:100%;max-height:82vh;object-fit:contain;border-radius:12px;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.5);background:#0a0a0e}
+/* sized to the shots themselves (1920x1080), so a click is a real jump in
+   legible detail rather than a modest bump */
+.lightbox-inner{max-width:1500px;width:100%;max-height:100%;display:flex;flex-direction:column;gap:14px;cursor:default;
+  animation:lbrise .3s var(--ease)}
+@keyframes lbrise{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.lightbox-inner img,.lightbox-inner video{width:100%;max-height:86vh;object-fit:contain;border-radius:12px;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.5);background:#0a0a0e}
 .lightbox-inner figcaption{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);text-align:center}
 .lightbox-close{position:fixed;top:20px;right:22px;z-index:10001;width:42px;height:42px;display:flex;align-items:center;justify-content:center;
   border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;
   transition:background var(--dur-btn) var(--ease),transform var(--dur-hover) var(--ease)}
 .lightbox-close:hover{background:var(--accent);transform:scale(1.05);border-color:transparent}
 
-/* specialties — "what I design", by system type */
+/* specialties: "what I design", by system type */
 /* flex, not grid: an incomplete last row centres itself instead of leaving a
    hole on the right. Card widths match the old 3-up grid exactly. */
 .spec-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--gap)}
@@ -220,7 +241,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .spec h3{font-size:19px;letter-spacing:-.02em;margin-bottom:10px}
 .spec p{color:var(--muted);font-size:14.5px;line-height:1.6}
 
-/* projects — continuous full-bleed marquee */
+/* projects: continuous full-bleed marquee */
 .proj-marquee{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;padding:8px 0;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
@@ -240,7 +261,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 @media (max-width:900px){ .svc-grid{grid-template-columns:1fr} }
 .svc{padding:var(--pad-card);display:flex;flex-direction:column;position:relative}
 .svc:hover{transform:translateY(-6px)}
-/* highlighted middle plan — filled accent gradient */
+/* highlighted middle plan: filled accent gradient */
 .svc.hot{border:0;color:#fff;
   background:linear-gradient(160deg,#7c6cff 0%,#5b4bff 52%,#6a3cf0 100%);
   box-shadow:0 28px 60px rgba(91,75,255,.36)}
@@ -257,8 +278,10 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .svc .price .unit{font-family:var(--font-body);font-weight:500;font-size:14px;letter-spacing:-.01em;color:var(--faint);margin-left:5px}
 .svc.hot .price .unit{color:rgba(255,255,255,.75)}
 .svc .forwho{color:var(--faint);font-size:13.5px;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}
-.svc ul{list-style:none;display:flex;flex-direction:column;gap:13px;flex:1}
-.svc li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:var(--ink)}
+/* gap is tighter than the other card lists: these run up to nine rows, and some
+   rows wrap to two lines */
+.svc ul{list-style:none;display:flex;flex-direction:column;gap:12px;flex:1}
+.svc li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;line-height:1.5;color:var(--ink)}
 .svc li svg{flex-shrink:0;margin-top:3px;color:var(--accent)}
 .svc .sbtn{margin-top:26px}
 .svc .sbtn a{width:100%;justify-content:center}
@@ -266,8 +289,11 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .scope-note b{color:var(--ink);font-weight:600}
 .scope-note a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;transition:color var(--dur-hover)}
 .scope-note a:hover{color:var(--ink)}
+.scope-fine{margin:12px auto 0;color:var(--faint);font-size:14px;line-height:1.6;max-width:var(--measure);text-align:center}
+.scope-fine a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;transition:color var(--dur-hover)}
+.scope-fine a:hover{color:var(--ink)}
 
-/* how it works — left-aligned step timeline
+/* how it works: left-aligned step timeline
    --tl-x is the spine's centre line; the node offset is derived from the card
    padding + half the numeral so nodes always line up with their number. */
 .tl{--tl-pad:32px;--tl-num:56px;--tl-col:52px;--tl-gap:20px;--tl-x:8px;
@@ -291,7 +317,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 @media (max-width:760px){ .tl{--tl-pad:26px;--tl-num:46px;--tl-col:38px;--tl-x:6px} .tl-card h3{font-size:19px} }
 @media (max-width:480px){ .tl{--tl-pad:22px;--tl-num:40px;--tl-col:26px;--tl-x:4px;--tl-gap:16px} }
 
-/* toolkit — brand icon cards */
+/* toolkit: brand icon cards */
 .tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
 @media (max-width:680px){ .tool-grid{grid-template-columns:1fr} }
 .tool-card{display:flex;align-items:center;gap:15px;padding:22px 24px}
@@ -302,7 +328,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .tool-name{font-family:var(--font-display);font-weight:600;font-size:16px;letter-spacing:-.02em;color:var(--ink)}
 .tool-role{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
-/* testimonials — one review at a time, auto-advancing */
+/* testimonials: one review at a time, auto-advancing */
 .quotes{max-width:720px;margin:0 auto}
 /* slides share one grid cell, so the card height is the tallest quote and
    never jumps as it rotates */
@@ -347,7 +373,7 @@ nav.small{padding:11px 0;background:rgba(244,244,242,.92);backdrop-filter:blur(1
 .faq details[open] summary .plus{transform:rotate(45deg)}
 .faq .fa{padding:0 4px 26px;color:var(--muted);font-size:16px;line-height:1.65;max-width:var(--measure)}
 
-/* final cta — indigo/violet band, echoing the Production plan */
+/* final cta: indigo/violet band, echoing the Production plan */
 .contact{text-align:center;border-radius:26px;overflow:hidden;position:relative;color:#fff;
   background:
     radial-gradient(90% 120% at 50% -15%, rgba(255,255,255,.16), transparent 55%),

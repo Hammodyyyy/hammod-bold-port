@@ -29,6 +29,18 @@ export default function SiteEffects() {
     const lockScroll = () => { if (lenis) lenis.stop(); else document.documentElement.style.overflow = "hidden"; };
     const unlockScroll = () => { if (lenis) lenis.start(); else document.documentElement.style.overflow = ""; };
 
+    // CaseMedia's lightbox cannot reach the Lenis instance itself, so it asks
+    // for the freeze by event. Without this the page keeps scrolling behind
+    // the overlay, since Lenis ignores overflow:hidden.
+    const onLbOpen = () => lockScroll();
+    const onLbClose = () => unlockScroll();
+    window.addEventListener("lightbox:open", onLbOpen);
+    window.addEventListener("lightbox:close", onLbClose);
+    cleanups.push(() => {
+      window.removeEventListener("lightbox:open", onLbOpen);
+      window.removeEventListener("lightbox:close", onLbClose);
+    });
+
     const nav = document.getElementById("nav");
     const navLinks = document.getElementById("navLinks");
     const burger = document.getElementById("burger");
@@ -190,7 +202,7 @@ export default function SiteEffects() {
       });
     }
 
-    // 3D tilt on cards — the area under the cursor recedes slightly
+    // 3D tilt on cards: the area under the cursor recedes slightly
     if (fine && !reduce) {
       const MAX = 6; // degrees
       const tiltEls = document.querySelectorAll(".card, .q, .contact");

@@ -1,4 +1,4 @@
-// Soft, slow-drifting gradient blobs behind everything. Pure CSS —
+// Soft, slow-drifting gradient blobs behind everything. Pure CSS,
 // GPU-composited (transform only) and auto-frozen under reduced-motion.
 export default function Aurora() {
   return (

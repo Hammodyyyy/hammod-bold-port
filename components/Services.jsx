@@ -1,4 +1,4 @@
-import { services, priceUnit, scopeNote } from "@/lib/data";
+import { services, priceUnit, pricingHead, priceNote } from "@/lib/data";
 
 function Check() {
   return (
@@ -12,9 +12,9 @@ export default function Services() {
   return (
     <section className="sec wrap" id="services">
       <div className="sec-head">
-        <span className="eyebrow mono reveal"><span className="dot"></span>Pricing</span>
-        <h2 className="reveal">One price. Designed, built, and ready to ship.</h2>
-        <p className="reveal">Every package includes implementation in Roblox Studio: responsive scaling, clean hierarchy, ready for your scripters. You get a fixed quote before any work starts.</p>
+        <span className="eyebrow mono reveal"><span className="dot"></span>{pricingHead.eyebrow}</span>
+        <h2 className="reveal">{pricingHead.h}</h2>
+        <p className="reveal">{pricingHead.p}</p>
       </div>
 
       <div className="svc-grid">
@@ -36,9 +36,10 @@ export default function Services() {
         ))}
       </div>
 
-      <p className="scope-note reveal">
-        <b>{scopeNote.lead}</b> {scopeNote.text}{" "}
-        <a href="#contact" data-cursor>{scopeNote.linkLabel}</a>
+      <p className="scope-note reveal">{priceNote.main}</p>
+      <p className="scope-fine reveal">
+        {priceNote.small}{" "}
+        <a href="#contact" data-cursor>{priceNote.smallLink}</a>
       </p>
     </section>
   );

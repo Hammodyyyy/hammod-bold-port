@@ -21,20 +21,21 @@ const SECTIONS = [
     h: "Revisions",
     p: [
       "Each package includes the number of revision rounds listed on its card. A round means one consolidated pass of feedback, not one comment.",
-      "Rounds cover refining what was agreed. Redirecting a system to a different concept after it is built counts as new scope.",
+      "Rounds cover refining what was agreed. Redirecting a screen to a different concept after it is built counts as new scope.",
     ],
   },
   {
     h: "Scope changes",
     p: [
-      "Scope is measured in UI systems. Larger systems such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we agree on where they land before the project starts.",
-      "Systems added beyond your package are quoted before any extra work starts. Nothing is added to your invoice without your say-so.",
+      "Scope is your game's actual screen list, agreed in writing before the project starts. Complex screens such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we settle where they land up front.",
+      "Screens added beyond that list are quoted before any extra work starts. Nothing is added to your invoice without your say-so.",
     ],
   },
   {
     h: "Delivery",
     p: [
-      "You receive the work built directly in Roblox Studio: responsive scaling, correct anchoring, and a named, organized hierarchy your scripters can wire up.",
+      "You receive the work built directly in Roblox Studio: responsive scaling, correct anchoring, and a named, organized hierarchy your developers can build on. Implementation is part of every package, not a paid extra.",
+      "Every package includes a post-delivery fixes window, from 7 to 60 days depending on the tier. Anything that breaks or needs adjusting inside that window is on me.",
       "Files are yours to use in your game. I may show the work in my portfolio unless you ask me not to.",
     ],
   },

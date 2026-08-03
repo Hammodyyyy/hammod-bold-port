@@ -4,6 +4,7 @@ import Aurora from "@/components/Aurora";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import TrustedBy from "@/components/TrustedBy";
+import StudioDemo from "@/components/StudioDemo";
 import Specialties from "@/components/Specialties";
 import Projects from "@/components/Projects";
 import Services from "@/components/Services";
@@ -25,6 +26,7 @@ export default function Page() {
         <Nav />
         <Hero />
         <TrustedBy />
+        <StudioDemo />
         <Projects />
         <Specialties />
         <Testimonials />

@@ -6,7 +6,7 @@ const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
 
 const TITLE = "Hammody · Roblox UI Design & Studio Implementation";
-const DESC = "Premium UI systems for Roblox games. I design and build production-ready interfaces (shops, HUDs, menus, and full systems) implemented directly in Roblox Studio. Trusted by creators including DoBig and Novaly.";
+const DESC = "Premium UI systems for Roblox games. I design, animate, and build interfaces (shops, HUDs, menus, and full systems) that arrive working inside Roblox Studio, with responsive scaling and interactive states. Trusted by creators including DoBig and Novaly.";
 
 export const metadata = {
   metadataBase: new URL("https://hammody.pages.dev"),

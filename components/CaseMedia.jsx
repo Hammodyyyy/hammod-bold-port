@@ -1,9 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 // Framed, click-to-expand case media. Renders a still by default; if `video`
 // is set (e.g. "/work/shop.mp4") it autoplays a muted loop instead. The
 // lightbox shows the full, uncropped asset.
+//
+// The overlay is portalled to <body> on purpose. This component is rendered
+// inside the projects marquee, and .proj-track carries a transform animation.
+// A transformed ancestor becomes the containing block for position:fixed
+// children, so an inline overlay would size itself against the 4650px track
+// and slide along with the marquee instead of covering the viewport.
 export default function CaseMedia({ img, video, title, kind }) {
   const [open, setOpen] = useState(false);
 
@@ -11,11 +18,11 @@ export default function CaseMedia({ img, video, title, kind }) {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    // SiteEffects owns the Lenis instance, so ask it to freeze the page.
+    window.dispatchEvent(new CustomEvent("lightbox:open"));
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      window.dispatchEvent(new CustomEvent("lightbox:close"));
     };
   }, [open]);
 
@@ -23,6 +30,24 @@ export default function CaseMedia({ img, video, title, kind }) {
     <video src={video} poster={img} autoPlay muted loop playsInline />
   ) : (
     <img src={img} alt={`${title}: ${kind}`} />
+  );
+
+  const overlay = (
+    <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${title}: full view`} onClick={() => setOpen(false)}>
+      <button type="button" className="lightbox-close" aria-label="Close" onClick={() => setOpen(false)}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <figure className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
+        {video ? (
+          <video src={video} poster={img} autoPlay muted loop playsInline controls />
+        ) : (
+          <img src={img} alt={`${title}: ${kind}`} />
+        )}
+        <figcaption>{title} · {kind}</figcaption>
+      </figure>
+    </div>
   );
 
   return (
@@ -36,23 +61,7 @@ export default function CaseMedia({ img, video, title, kind }) {
         </span>
       </button>
 
-      {open && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${title}: full view`} onClick={() => setOpen(false)}>
-          <button type="button" className="lightbox-close" aria-label="Close" onClick={() => setOpen(false)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6 6 18M6 6l12 12" />
-            </svg>
-          </button>
-          <figure className="lightbox-inner" onClick={(e) => e.stopPropagation()}>
-            {video ? (
-              <video src={video} poster={img} autoPlay muted loop playsInline controls />
-            ) : (
-              <img src={img} alt={`${title}: ${kind}`} />
-            )}
-            <figcaption>{title} · {kind}</figcaption>
-          </figure>
-        </div>
-      )}
+      {open && createPortal(overlay, document.body)}
     </>
   );
 }
