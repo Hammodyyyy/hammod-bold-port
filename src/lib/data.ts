@@ -338,3 +338,44 @@ export const socials = [
   { label: 'Roblox', handle: 'H4MMODY', href: profile.robloxUrl, platform: 'roblox' as const },
   { label: 'X', handle: '@__Hammody', href: profile.xUrl, platform: 'x' as const },
 ];
+
+// Plain-language terms, carried over from the previous site so hammody.me/terms
+// keeps working. Everything here matches what the main page already states, so
+// the two never drift apart.
+export const termsHead = {
+  h: 'Terms',
+  lead: 'The short version of how a project runs. If anything here is unclear, ask me on Discord before you book and I will spell it out.',
+  updated: 'Last updated August 2026.',
+};
+
+export const terms = [
+  {
+    h: 'Payment',
+    p: [
+      'Projects are split 50% upfront and 50% on delivery. The upfront half locks your slot in the schedule and is what starts the work.',
+      'You get a fixed quote before anything begins. The price does not change unless the scope does, and any change is quoted and agreed first.',
+    ],
+  },
+  {
+    h: 'Revisions',
+    p: [
+      'Each package includes the number of revision rounds listed on its card. A round means one consolidated pass of feedback, not one comment.',
+      'Rounds cover refining what was agreed. Redirecting a screen to a different concept after it is built counts as new scope.',
+    ],
+  },
+  {
+    h: 'Scope changes',
+    p: [
+      "Scope is your game's actual screen list, agreed in writing before the project starts. Complex screens such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we settle where they land up front.",
+      'Screens added beyond that list are quoted before any extra work starts. Nothing is added to your invoice without your say-so.',
+    ],
+  },
+  {
+    h: 'Delivery',
+    p: [
+      'You receive the work built directly in Roblox Studio: responsive scaling, correct anchoring, and a named, organized hierarchy your developers can build on. Implementation is part of every package, not a paid extra.',
+      'Every package includes a post-delivery fixes window, from 7 to 60 days depending on the tier. Anything that breaks or needs adjusting inside that window is on me.',
+      'Files are yours to use in your game. I may show the work in my portfolio unless you ask me not to.',
+    ],
+  },
+];

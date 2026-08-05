@@ -79,6 +79,12 @@ export default function ContactSection() {
           © {new Date().getFullYear()} {profile.name}. {profile.role}
         </span>
         <div className="flex items-center gap-4">
+          <a
+            href="/terms"
+            className="-my-2 flex min-h-[44px] items-center transition-colors hover:text-[#C084FC]"
+          >
+            Terms
+          </a>
           {socials.map((s) => (
             <a
               key={s.label}
