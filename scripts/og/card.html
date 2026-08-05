@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;900&family=Inter:wght@300;400&family=Space+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        background: #0c0c0c;
+        font-family: 'Inter', sans-serif;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      /* violet glow, echoing the featured panels on the site */
+      .glow {
+        position: absolute;
+        width: 900px; height: 900px;
+        right: -260px; bottom: -420px;
+        background: radial-gradient(circle, rgba(124,58,237,.42) 0%, rgba(192,38,211,.16) 42%, transparent 68%);
+        pointer-events: none;
+      }
+      .glow-2 {
+        position: absolute;
+        width: 620px; height: 620px;
+        left: -240px; top: -300px;
+        background: radial-gradient(circle, rgba(192,132,252,.16) 0%, transparent 65%);
+        pointer-events: none;
+      }
+
+      .wrap { position: relative; display: flex; width: 100%; height: 100%; align-items: center; }
+
+      .left { padding: 0 0 0 72px; width: 700px; flex-shrink: 0; }
+
+      .eyebrow {
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: #c084fc;
+        display: block;
+        margin-bottom: 22px;
+      }
+
+      h1 {
+        font-family: 'Kanit', sans-serif;
+        font-weight: 900;
+        font-size: 118px;
+        white-space: nowrap;
+        line-height: .84;
+        letter-spacing: -.035em;
+        text-transform: uppercase;
+        background: linear-gradient(180deg, #ffffff 0%, #9db6c9 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .tagline {
+        margin-top: 26px;
+        font-size: 25px;
+        font-weight: 300;
+        line-height: 1.42;
+        color: rgba(215, 226, 234, .72);
+        max-width: 520px;
+      }
+
+      .chips { margin-top: 32px; display: flex; gap: 10px; }
+      .chip {
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: #ffffff;
+        border-radius: 100px;
+        padding: 9px 17px;
+        background: linear-gradient(120deg, #6d28d9 0%, #9333ea 50%, #c026d3 100%);
+        box-shadow: 0 4px 18px rgba(147, 51, 234, .34);
+      }
+      .chip.ghost {
+        background: transparent;
+        border: 2px solid rgba(215, 226, 234, .3);
+        color: rgba(215, 226, 234, .8);
+        box-shadow: none;
+      }
+
+      /* the work, fanned like the hero */
+      .shots { position: relative; flex: 1; height: 100%; }
+      .shot {
+        position: absolute;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.14);
+        box-shadow: 0 30px 70px rgba(0,0,0,.62);
+      }
+      .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+      .s1 { width: 420px; height: 236px; top: 92px;  left: 18px;  transform: rotate(-5deg); z-index: 1; }
+      .s2 { width: 452px; height: 254px; top: 250px; left: 74px; transform: rotate(3deg);  z-index: 3; }
+      .s3 { width: 366px; height: 206px; top: 20px;  left: 250px; transform: rotate(6deg);  z-index: 2; opacity: .92; }
+    </style>
+  </head>
+  <body>
+    <div class="glow"></div>
+    <div class="glow-2"></div>
+
+    <div class="wrap">
+      <div class="left">
+        <span class="eyebrow">Roblox UI Design</span>
+        <h1>Hammody</h1>
+        <p class="tagline">
+          Premium UI systems for Roblox games. Designed, animated, and built
+          inside Studio.
+        </p>
+        <div class="chips">
+          <span class="chip">Shops · HUDs · Menus</span>
+          <span class="chip ghost">hammody.me</span>
+        </div>
+      </div>
+
+      <div class="shots">
+        <div class="shot s3"><img src="../../public/work/quests-960.webp" alt="" /></div>
+        <div class="shot s1"><img src="../../public/work/store-960.webp" alt="" /></div>
+        <div class="shot s2"><img src="../../public/work/kitchen-960.webp" alt="" /></div>
+      </div>
+    </div>
+  </body>
+</html>
