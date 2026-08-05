@@ -1,0 +1,35 @@
+{
+  "name": "hammody-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "images": "node scripts/optimize-images.mjs"
+  },
+  "dependencies": {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^0.344.0",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.25",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.6.3"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true
+  }
+}

@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --font-display / --font-body / --font-mono are injected on <html> by
+   next/font in app/layout.tsx, so they are referenced here, not declared. */
+html,
+body {
+  background: #0c0c0c;
+  /* body copy reads in Inter: Kanit Light at 15px is thin and hard to scan */
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* stops iOS bumping type size when the phone is turned sideways */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  /* the grey flash on tap reads as a bug on a dark canvas */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* images and video never punch out of their column on a narrow screen */
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid #c084fc;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* The template's #646973 top stop rendered as flat dead grey on black and made
+   every dark-section heading look unfinished. Starting at white keeps the
+   vertical fall-off but gives the type real presence. */
+.hero-heading {
+  background: linear-gradient(180deg, #ffffff 0%, #9db6c9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

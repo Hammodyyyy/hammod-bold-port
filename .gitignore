@@ -1,0 +1,12 @@
+node_modules/
+
+# next
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# os / editor
+.DS_Store
+Thumbs.db
+*.log
