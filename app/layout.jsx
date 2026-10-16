@@ -1,12 +1,12 @@
 import "./globals.css";
-import { Space_Grotesk, Inter, Space_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
 
-const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
-const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
-const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
+// One variable family. The width axis does the work: condensed for display
+// type, normal width for reading.
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 
 const TITLE = "Hammody · Roblox UI Design & Studio Implementation";
-const DESC = "Premium UI systems for Roblox games. I design, animate, and build interfaces (shops, HUDs, menus, and full systems) that arrive working inside Roblox Studio, with responsive scaling and interactive states. Trusted by creators including DoBig and Novaly.";
+const DESC = "Roblox UI designed and built in Studio. Shops, HUDs, menus and full systems, priced per screen from $75 and delivered working inside Roblox Studio. Trusted by creators including DoBig and Novaly.";
 
 export const metadata = {
   metadataBase: new URL("https://hammody.pages.dev"),
@@ -25,11 +25,11 @@ export const metadata = {
   },
 };
 
-export const viewport = { themeColor: "#f4f4f2", width: "device-width", initialScale: 1 };
+export const viewport = { themeColor: "#ebebe8", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="en" className={archivo.variable}>
       <body>{children}</body>
     </html>
   );

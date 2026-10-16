@@ -1,42 +1,30 @@
-import Loader from "@/components/Loader";
-import Cursor from "@/components/Cursor";
-import Aurora from "@/components/Aurora";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import TrustedBy from "@/components/TrustedBy";
-import StudioDemo from "@/components/StudioDemo";
-import Specialties from "@/components/Specialties";
-import Projects from "@/components/Projects";
-import Services from "@/components/Services";
-import HowItWorks from "@/components/HowItWorks";
-import Toolkit from "@/components/Toolkit";
+import Proof from "@/components/Proof";
+import Work from "@/components/Work";
+import Process from "@/components/Process";
+import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
-import Contact from "@/components/Sign";
+import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SiteEffects from "@/components/SiteEffects";
 
 export default function Page() {
   return (
     <>
-      <Loader />
-      <Cursor />
-      <Aurora />
-      <div className="content">
-        <Nav />
+      <Nav />
+      <main>
         <Hero />
-        <TrustedBy />
-        <StudioDemo />
-        <Projects />
-        <Specialties />
+        <Proof />
+        <Work />
+        <Process />
+        <Pricing />
         <Testimonials />
-        <HowItWorks />
-        <Services />
-        <Toolkit />
         <FAQ />
         <Contact />
-        <Footer />
-      </div>
+      </main>
+      <Footer />
       <SiteEffects />
     </>
   );

@@ -5,20 +5,21 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
+// Page-level behaviour: smooth scroll on desktop, anchor links, the mobile
+// menu, the nav's scrolled state, and the entrance and scroll reveals.
+// Everything degrades to instant and static under reduced motion.
 export default function SiteEffects() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     gsap.registerPlugin(ScrollTrigger);
-
-    let lenis = null;
-    let rafId = 0;
     const cleanups = [];
+
     // Lenis smooth-scroll is desktop-only; native scroll on touch avoids jank/lock issues
     const touch = window.matchMedia("(hover: none)").matches;
-
+    let lenis = null;
     if (!reduce && !touch) {
       try {
-        lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+        lenis = new Lenis({ lerp: 0.075, smoothWheel: true, wheelMultiplier: 0.9 });
         lenis.on("scroll", ScrollTrigger.update);
         const tick = (t) => lenis.raf(t * 1000);
         gsap.ticker.add(tick);
@@ -32,207 +33,79 @@ export default function SiteEffects() {
     // CaseMedia's lightbox cannot reach the Lenis instance itself, so it asks
     // for the freeze by event. Without this the page keeps scrolling behind
     // the overlay, since Lenis ignores overflow:hidden.
-    const onLbOpen = () => lockScroll();
-    const onLbClose = () => unlockScroll();
-    window.addEventListener("lightbox:open", onLbOpen);
-    window.addEventListener("lightbox:close", onLbClose);
+    window.addEventListener("lightbox:open", lockScroll);
+    window.addEventListener("lightbox:close", unlockScroll);
     cleanups.push(() => {
-      window.removeEventListener("lightbox:open", onLbOpen);
-      window.removeEventListener("lightbox:close", onLbClose);
+      window.removeEventListener("lightbox:open", lockScroll);
+      window.removeEventListener("lightbox:close", unlockScroll);
     });
 
-    const nav = document.getElementById("nav");
+    // mobile menu
     const navLinks = document.getElementById("navLinks");
     const burger = document.getElementById("burger");
-    const closeMenu = () => { navLinks && navLinks.classList.remove("open"); burger && burger.classList.remove("open"); unlockScroll(); };
+    const closeMenu = () => {
+      if (!navLinks || !navLinks.classList.contains("open")) return;
+      navLinks.classList.remove("open"); burger.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false"); unlockScroll();
+    };
+    const onBurger = () => {
+      if (navLinks.classList.contains("open")) return closeMenu();
+      navLinks.classList.add("open"); burger.classList.add("open");
+      burger.setAttribute("aria-expanded", "true"); lockScroll();
+    };
+    if (burger && navLinks) { burger.addEventListener("click", onBurger); cleanups.push(() => burger.removeEventListener("click", onBurger)); }
 
+    // anchor links scroll through Lenis when it is running
     const anchorHandlers = [];
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
       const h = (e) => {
         const id = a.getAttribute("href"); if (!id || id.length < 2) return;
-        const el = document.querySelector(id); if (!el) return; e.preventDefault();
-        closeMenu();
-        if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.2 });
+        const el = document.querySelector(id); if (!el) return;
+        e.preventDefault(); closeMenu();
+        if (lenis) lenis.scrollTo(el, { offset: id === "#top" ? 0 : -60, duration: 1.1 });
         else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
       };
       a.addEventListener("click", h); anchorHandlers.push([a, h]);
     });
     cleanups.push(() => anchorHandlers.forEach(([a, h]) => a.removeEventListener("click", h)));
 
-    const loader = document.getElementById("loader");
-    const lnum = document.getElementById("lnum");
-    const lbar = document.getElementById("lbar");
-    lockScroll();
+    // nav gets its backdrop once the top of the page has scrolled away
+    const nav = document.getElementById("nav");
+    if (nav && "IntersectionObserver" in window) {
+      const sentinel = document.createElement("div");
+      sentinel.style.cssText = "position:absolute;top:0;left:0;height:24px;width:1px;pointer-events:none";
+      document.body.prepend(sentinel);
+      const io = new IntersectionObserver(([e]) => nav.classList.toggle("small", !e.isIntersecting));
+      io.observe(sentinel);
+      cleanups.push(() => { io.disconnect(); sentinel.remove(); });
+    }
 
-    const heroIn = () => {
-      if (reduce) { document.querySelectorAll(".reveal").forEach((r) => { r.style.opacity = 1; r.style.transform = "none"; }); return; }
-      // standardized: section-scale reveals at 500ms on one easing curve
-      gsap.from(".hero h1 .ln", { yPercent: 112, duration: 0.7, ease: "power3.out", stagger: 0.07 });
-      gsap.from(".hero-eyebrow", { opacity: 0, duration: 0.4, delay: 0.1 });
-      gsap.from(".hero-sub", { y: 18, opacity: 0, duration: 0.5, ease: "power3.out", delay: 0.3 });
-      gsap.from(".hero-cta", { y: 18, opacity: 0, duration: 0.5, ease: "power3.out", delay: 0.4 });
-    };
+    // reveals
+    const reveals = gsap.utils.toArray(".reveal");
+    if (reduce) {
+      document.documentElement.classList.add("no-motion");
+    } else {
+      // headings outside the hero rise out of their masks as they scroll in
+      // (the hero runs its own entrance)
+      gsap.utils.toArray(".clip .ln").forEach((ln) => {
+        if (ln.closest(".hero")) return;
+        gsap.from(ln, { yPercent: 105, duration: 1.1, ease: "expo.out", scrollTrigger: { trigger: ln.parentElement, start: "top 88%" } });
+      });
 
-    const buildScroll = () => {
-      if (reduce) {
-        gsap.utils.toArray(".reveal").forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; });
-        // no scrubbing, so show the spine already walked rather than blank
-        document.querySelectorAll(".tl-node").forEach((n) => n.classList.add("on"));
-        document.querySelectorAll(".tl-fill").forEach((f) => { f.style.transform = "scaleY(1)"; });
-        return;
-      }
-      // gentle fade + rise, staggered as each cluster of elements scrolls in
-      gsap.set(".reveal", { opacity: 0, y: 30 });
-      ScrollTrigger.batch(".reveal", {
+      gsap.set(reveals, { opacity: 0, y: 24 });
+      ScrollTrigger.batch(reveals, {
         start: "top 90%",
-        onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", stagger: 0.1, overwrite: true }),
+        onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out", stagger: 0.08, overwrite: true }),
       });
-      gsap.utils.toArray(".clip .ln").forEach((el) => {
-        if (el.closest(".hero")) return;
-        gsap.from(el, { yPercent: 112, duration: 0.7, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
-      });
-      // The footer sits ~55px off the page bottom, so on any viewport taller
-      // than ~550px its top can never climb to the batch's 90% line and it
-      // would stay at opacity 0 forever. Give it a reachable trigger.
-      const foot = document.querySelector(".foot.reveal");
-      if (foot) {
-        ScrollTrigger.create({
-          trigger: foot, start: "top bottom",
-          onEnter: () => gsap.to(foot, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out", overwrite: true }),
-        });
-      }
-
-      // timeline spine: each node lights as it passes, and the rail below it
-      // fills while that step scrolls through
-      gsap.utils.toArray(".tl-step").forEach((step) => {
-        const node = step.querySelector(".tl-node");
-        const fill = step.querySelector(".tl-fill");
-        if (node) {
-          ScrollTrigger.create({
-            trigger: step, start: "top 60%",
-            onEnter: () => node.classList.add("on"),
-            onLeaveBack: () => node.classList.remove("on"),
-          });
-        }
-        if (fill) {
-          gsap.to(fill, {
-            scaleY: 1, ease: "none",
-            scrollTrigger: { trigger: step, start: "top 60%", end: "bottom 60%", scrub: true },
-          });
-        }
-      });
-
-      // safety net: reveal anything already at/above the fold (e.g. reload mid-page)
+      // anything already past the trigger line on load (e.g. reload mid-page)
       requestAnimationFrame(() => {
-        gsap.utils.toArray(".reveal").forEach((el) => {
-          if (el.getBoundingClientRect().top < window.innerHeight * 0.9 && gsap.getProperty(el, "opacity") === 0) {
-            gsap.to(el, { opacity: 1, y: 0, duration: 0.75, ease: "power2.out" });
-          }
+        reveals.forEach((el) => {
+          if (el.getBoundingClientRect().top < window.innerHeight * 0.9) gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" });
         });
       });
-      ScrollTrigger.refresh();
       const onLoad = () => ScrollTrigger.refresh();
       window.addEventListener("load", onLoad);
       cleanups.push(() => window.removeEventListener("load", onLoad));
-    };
-
-    const finish = () => {
-      if (reduce) { if (loader) loader.style.display = "none"; unlockScroll(); heroIn(); buildScroll(); return; }
-      gsap.to(loader, { yPercent: -100, duration: 0.6, ease: "power4.inOut", delay: 0.1, onComplete: () => {
-        if (loader) loader.style.display = "none"; unlockScroll(); heroIn(); buildScroll();
-      }});
-    };
-
-    if (reduce) { if (lnum) lnum.textContent = "[ 100 ]"; if (lbar) lbar.style.width = "100%"; finish(); }
-    else {
-      const p = { v: 0 };
-      gsap.to(p, { v: 100, duration: 1.05, ease: "power2.inOut",
-        onUpdate: () => { const n = Math.round(p.v); if (lnum) lnum.textContent = `[ ${String(n).padStart(3, "0")} ]`; if (lbar) lbar.style.width = n + "%"; },
-        onComplete: finish });
-    }
-
-    const onScroll = () => { if (!nav) return; if (window.scrollY > 40) nav.classList.add("small"); else nav.classList.remove("small"); };
-    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
-    cleanups.push(() => window.removeEventListener("scroll", onScroll));
-
-    const onBurger = () => {
-      if (navLinks.classList.contains("open")) closeMenu();
-      else { navLinks.classList.add("open"); burger.classList.add("open"); lockScroll(); }
-    };
-    if (burger) { burger.addEventListener("click", onBurger); cleanups.push(() => burger.removeEventListener("click", onBurger)); }
-
-    const dot = document.getElementById("dot");
-    const ring = document.getElementById("ring");
-    const glow = document.getElementById("glow");
-    const fine = window.matchMedia("(any-pointer: fine)").matches;
-    if (fine && !reduce && dot && ring) {
-      document.body.classList.add("cursor-on");
-      if (glow) document.body.classList.add("glow-on");
-      let mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my, gx = mx, gy = my;
-      dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-      const onMove = (e) => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`; };
-      window.addEventListener("mousemove", onMove);
-      // single rAF loop: ring (snappy lerp) + ambient glow (soft trailing lerp), both GPU-composited
-      const loop = () => {
-        rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
-        ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
-        if (glow) { gx += (mx - gx) * 0.14; gy += (my - gy) * 0.14; glow.style.setProperty("--gx", gx + "px"); glow.style.setProperty("--gy", gy + "px"); }
-        rafId = requestAnimationFrame(loop);
-      };
-      loop();
-      const hoverEls = document.querySelectorAll("[data-cursor],a,button,summary");
-      const enter = () => ring.classList.add("hover");
-      const leave = () => ring.classList.remove("hover");
-      hoverEls.forEach((el) => { el.addEventListener("mouseenter", enter); el.addEventListener("mouseleave", leave); });
-      const magnets = document.querySelectorAll(".magnetic");
-      const magHandlers = [];
-      magnets.forEach((b) => {
-        const move = (e) => { const r = b.getBoundingClientRect(); const x = e.clientX - (r.left + r.width / 2); const y = e.clientY - (r.top + r.height / 2); gsap.to(b, { x: x * 0.3, y: y * 0.4, duration: 0.5, ease: "power3.out" }); };
-        const out = () => gsap.to(b, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1,.4)" });
-        b.addEventListener("mousemove", move); b.addEventListener("mouseleave", out);
-        magHandlers.push([b, move, out]);
-      });
-      cleanups.push(() => {
-        window.removeEventListener("mousemove", onMove);
-        cancelAnimationFrame(rafId);
-        hoverEls.forEach((el) => { el.removeEventListener("mouseenter", enter); el.removeEventListener("mouseleave", leave); });
-        magHandlers.forEach(([b, mv, ml]) => { b.removeEventListener("mousemove", mv); b.removeEventListener("mouseleave", ml); });
-        document.body.classList.remove("cursor-on");
-        document.body.classList.remove("glow-on");
-      });
-    }
-
-    // 3D tilt on cards: the area under the cursor recedes slightly
-    if (fine && !reduce) {
-      const MAX = 6; // degrees
-      const tiltEls = document.querySelectorAll(".card, .q, .contact");
-      const tiltHandlers = [];
-      tiltEls.forEach((el) => {
-        const noScale = el.classList.contains("contact"); // big band: rotate only
-        let raf = 0, cx = 0, cy = 0;
-        const move = (e) => {
-          cx = e.clientX; cy = e.clientY;
-          if (raf) return;
-          raf = requestAnimationFrame(() => {
-            raf = 0;
-            const r = el.getBoundingClientRect();
-            const px = (cx - (r.left + r.width / 2)) / (r.width / 2);
-            const py = (cy - (r.top + r.height / 2)) / (r.height / 2);
-            const persp = Math.max(900, r.width * 1.8); // scale perspective to size
-            el.style.transform = `perspective(${persp.toFixed(0)}px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) scale(${noScale ? 1 : 1.015})`;
-          });
-        };
-        const enter = () => { el.style.transition = "transform .12s ease-out, box-shadow var(--dur-card) var(--ease)"; };
-        const leave = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } el.style.transition = "transform .5s var(--ease), box-shadow var(--dur-card) var(--ease)"; el.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) scale(1)"; };
-        el.addEventListener("pointerenter", enter);
-        el.addEventListener("pointermove", move);
-        el.addEventListener("pointerleave", leave);
-        tiltHandlers.push([el, enter, move, leave]);
-      });
-      cleanups.push(() => tiltHandlers.forEach(([el, en, mv, lv]) => {
-        el.removeEventListener("pointerenter", en); el.removeEventListener("pointermove", mv); el.removeEventListener("pointerleave", lv);
-        el.style.transform = ""; el.style.transition = "";
-      }));
     }
 
     return () => {
