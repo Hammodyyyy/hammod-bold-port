@@ -6,7 +6,7 @@ import { Archivo } from "next/font/google";
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 
 const TITLE = "Hammody · Roblox UI Design & Studio Implementation";
-const DESC = "Roblox UI designed and built in Studio. Shops, HUDs, menus and full systems, priced per screen from $75 and delivered working inside Roblox Studio. Trusted by creators including DoBig and Novaly.";
+const DESC = "Roblox UI designed and built in Studio. Shops, HUDs, menus and full systems, priced per screen from $60 and delivered working inside Roblox Studio. Trusted by creators including DoBig and Novaly.";
 
 export const metadata = {
   metadataBase: new URL("https://hammody.me"),

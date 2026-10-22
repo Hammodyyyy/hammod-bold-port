@@ -27,7 +27,7 @@ const SECTIONS = [
   {
     h: "Scope changes",
     p: [
-      "Pricing is per screen: $85 a screen for one to four screens, $75 a screen from five. Scope is your game's actual screen list, agreed in writing before the project starts. Complex screens such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we settle where they land up front.",
+      "Pricing is per screen: $75 a screen for one to four screens, $60 a screen from five. Scope is your game's actual screen list, agreed in writing before the project starts. Complex screens such as skill trees, quest hubs, crafting, and trading take more work than a simple menu, so we settle where they land up front.",
       "Screens added beyond that list are quoted before any extra work starts. Nothing is added to your invoice without your say-so.",
     ],
   },
